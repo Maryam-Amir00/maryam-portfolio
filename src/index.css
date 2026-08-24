@@ -1,0 +1,271 @@
+@import "tailwindcss";
+
+:root {
+  --bg-app: #161618;
+  --bg-topbar: #1c1c1f;
+  --bg-activity: #121214;
+  --bg-sidebar: #19191c;
+  --bg-editor: #1e1e22;
+  --bg-tab: #18181b;
+  --bg-tab-active: #1e1e22;
+  --bg-hover: #2a2a31;
+  --border-subtle: #3a3a44;
+  --text-primary: #d6d6dc;
+  --text-secondary: #9a9aa3;
+  --text-muted: #8a8a94;
+  --accent: #4ec9e0;
+  --status-bg: #2b5d8a;
+  --status-fg: #e8eef5;
+  --file-ts: #519aba;
+  --file-tsx: #4fc1e8;
+  --file-jsx: #c6c05a;
+  --file-md: #7b8fb8;
+  --file-json: #c9b06a;
+  --file-pdf: #c07070;
+  --file-folder: #8b8b78;
+  --syntax-comment: #6f8f68;
+  --syntax-keyword: #6ea0d4;
+  --syntax-string: #c9a07a;
+  --syntax-property: #8fb7d4;
+  --error: #e09090;
+  --success: #7da87a;
+  --motion-fast: 120ms;
+  --motion-base: 170ms;
+  --motion-overlay: 200ms;
+  --ease-ui: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --z-sidebar-backdrop: 20;
+  --z-sidebar: 30;
+  --z-terminal: 40;
+  --z-command-palette: 50;
+}
+
+@theme inline {
+  --color-app: var(--bg-app);
+  --color-topbar: var(--bg-topbar);
+  --color-activity: var(--bg-activity);
+  --color-sidebar: var(--bg-sidebar);
+  --color-editor: var(--bg-editor);
+  --color-tab: var(--bg-tab);
+  --color-tab-active: var(--bg-tab-active);
+  --color-hover: var(--bg-hover);
+  --color-subtle: var(--border-subtle);
+  --color-fg: var(--text-primary);
+  --color-fg-secondary: var(--text-secondary);
+  --color-fg-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-status: var(--status-bg);
+  --color-status-fg: var(--status-fg);
+  --color-file-ts: var(--file-ts);
+  --color-file-tsx: var(--file-tsx);
+  --color-file-jsx: var(--file-jsx);
+  --color-file-md: var(--file-md);
+  --color-file-json: var(--file-json);
+  --color-file-pdf: var(--file-pdf);
+  --color-file-folder: var(--file-folder);
+  --color-syntax-comment: var(--syntax-comment);
+  --color-syntax-keyword: var(--syntax-keyword);
+  --color-syntax-string: var(--syntax-string);
+  --color-syntax-property: var(--syntax-property);
+  --color-error: var(--error);
+  --color-success: var(--success);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Code", Consolas, monospace;
+  --z-sidebar-backdrop: 20;
+  --z-sidebar: 30;
+  --z-terminal: 40;
+  --z-command-palette: 50;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100dvh;
+  margin: 0;
+  overflow: hidden;
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+button {
+  font-family: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[role="option"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.editor-main:focus {
+  outline: none;
+}
+
+.editor-main:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline-offset: -2px;
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--accent) 42%, transparent);
+  color: var(--text-primary);
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--text-primary);
+  caret-color: var(--accent);
+  box-shadow: 0 0 0 1000px var(--bg-tab) inset;
+  transition: background-color 99999s ease-out;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 60;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-editor);
+  color: var(--text-primary);
+  border: 2px solid var(--accent);
+  border-radius: 4px;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: none;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.a11y-scroll-target {
+  scroll-margin-top: 4.75rem;
+  scroll-margin-bottom: 5.5rem;
+}
+
+.workspace-tabs {
+  scrollbar-width: none;
+}
+
+.workspace-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.terminal-mono {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+}
+
+.workspace-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-subtle) transparent;
+  overscroll-behavior: contain;
+}
+
+.workspace-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.workspace-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.workspace-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 8px;
+}
+
+@utility ui-transition {
+  transition-property: color, background-color, border-color, opacity, fill,
+    stroke;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--ease-ui);
+}
+
+@utility ui-transition-transform {
+  transition-property: color, background-color, border-color, opacity, transform;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--ease-ui);
+}
+
+@utility interactive-text {
+  transition-property: color, opacity, text-decoration-color;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--ease-ui);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+
+  .ui-transition,
+  .ui-transition-transform,
+  .interactive-text {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes sidebar-overlay-in {
+  from {
+    opacity: 0.92;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes terminal-overlay-in {
+  from {
+    opacity: 0.92;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  .sidebar-overlay-in {
+    animation: sidebar-overlay-in 140ms var(--ease-ui);
+  }
+}
+
+@media (max-width: 767px) {
+  .terminal-overlay-in {
+    animation: terminal-overlay-in 150ms var(--ease-ui);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-overlay-in,
+  .terminal-overlay-in {
+    animation: none !important;
+  }
+}
