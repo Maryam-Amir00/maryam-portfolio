@@ -275,6 +275,8 @@ const studySyncEntries = collect([
       ...studySyncProject.introStack,
       "rest apis",
       "communities",
+      "projects",
+      "project",
     ],
   ),
   ...studySyncProject.features.map((feature) =>
@@ -326,7 +328,7 @@ const movixxxEntries = collect([
     movixxxProject.name,
     `${movixxxProject.name} · ${movixxxProject.subtitle}`,
     movixxxProject.summary,
-    ["movixxx", "movie search app", "react", "omdb", "watchlist"],
+    ["movixxx", "movie search app", "react", "javascript", "omdb", "watchlist", "projects", "project"],
   ),
   entry(
     "movixxx-debounce",
@@ -375,7 +377,7 @@ const styliqueEntries = collect([
     styliqueProject.name,
     `${styliqueProject.name} · ${styliqueProject.subtitle}`,
     styliqueProject.summary,
-    ["stylique", "ecommerce", "cart", "wishlist", "react"],
+    ["stylique", "ecommerce", "cart", "wishlist", "react", "javascript", "projects", "project"],
   ),
   entry(
     "stylique-routing",
@@ -443,7 +445,7 @@ const resumeEntries = collect([
     "resume",
     "Resume",
     resumeData.displayName,
-    `${personalInfo.name}, ${personalInfo.role}. ${personalInfo.specialization}. ${resumeMeta[1]?.value ?? "PDF"}.`,
+    `${personalInfo.name}, ${personalInfo.role}. ${resumeData.focus}. ${resumeMeta[1]?.value ?? "PDF"}.`,
     ["resume", "cv", "pdf", "email", personalInfo.email],
   ),
 ])

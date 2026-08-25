@@ -12,7 +12,7 @@ export function EditorBreadcrumbs({ items }: { items: BreadcrumbItem[] }) {
   return (
     <p
       aria-label={fullPath}
-      className="flex h-7 min-h-7 shrink-0 items-center overflow-hidden border-b border-subtle px-[clamp(1rem,3.5vw,2.25rem)] text-[12px] text-fg-muted"
+      className="flex h-7 min-h-7 min-w-0 max-w-full shrink-0 items-center overflow-hidden border-b border-subtle px-[clamp(1rem,3.5vw,2.25rem)] text-[12px] text-fg-muted whitespace-nowrap"
     >
       <span className="flex min-w-0 items-center gap-1 overflow-hidden whitespace-nowrap">
         {items.map((item, index) => (

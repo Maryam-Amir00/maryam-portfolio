@@ -24,8 +24,8 @@ export function VSCodeLayout() {
       <MobileWorkspaceHeader />
       <div className="flex min-h-0 min-w-0 flex-1">
         <ActivityBar />
-        <div className="relative flex min-h-0 min-w-0 flex-1 flex-col">
-          <div className="relative flex min-h-0 min-w-0 flex-1">
+        <div className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+          <div className="relative flex min-h-0 min-w-0 flex-1 overflow-hidden">
             <ResponsiveSidebar>
               <Explorer />
               <SearchPanel />

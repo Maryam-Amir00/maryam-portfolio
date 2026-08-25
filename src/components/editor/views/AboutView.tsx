@@ -16,14 +16,14 @@ const prose =
 
 export function AboutView() {
   return (
-    <div className="flex min-h-full min-w-0 flex-col overflow-x-hidden">
+    <div className="flex min-h-full min-w-0 flex-col overflow-x-clip">
       <EditorBreadcrumbs
         items={[
           { label: "src" },
           { label: "about.md", current: true },
         ]}
       />
-      <article className="mr-auto min-w-0 w-full max-w-[72rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-8">
+      <article className="@container mr-auto min-w-0 w-full max-w-[72rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-8">
         <Intro />
         <WhatIBuild />
         <Approach />
@@ -155,7 +155,7 @@ function CurrentFocus() {
       <Heading level={2}>Current Focus</Heading>
       <div className="mt-3.5 grid min-w-0 items-start gap-6 xl:grid-cols-2 xl:gap-10">
         <p className={prose}>{currentFocus.intro}</p>
-        <pre className="overflow-x-auto rounded-sm border border-subtle bg-tab px-4 py-3 font-mono text-[13px] leading-6 whitespace-pre-wrap">
+        <pre className="code-scroll overflow-x-auto rounded-sm border border-subtle bg-tab px-4 py-3 font-mono text-[13px] leading-6 whitespace-pre">
           <code>
             <span className="text-syntax-keyword">const</span>
             {" currentFocus = ["}

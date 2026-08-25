@@ -1,7 +1,14 @@
 import type { ReactNode } from "react"
-import { ArrowRight, FileText, FolderOpen, UserRound } from "lucide-react"
 import {
-  getVisibleSocialLinks,
+  ArrowRight,
+  ExternalLink,
+  FileText,
+  FolderOpen,
+  UserRound,
+} from "lucide-react"
+import {
+  getContactGitHubUrl,
+  getContactLinkedInUrl,
   personalInfo,
 } from "../../../data/personalInfo"
 import {
@@ -22,7 +29,7 @@ import { EditorGutter } from "../EditorGutter"
 
 export function HomeView() {
   return (
-    <div className="flex min-h-full min-w-0 flex-col overflow-x-hidden">
+    <div className="flex min-h-full min-w-0 flex-col overflow-x-clip">
       <EditorBreadcrumbs
         items={[
           { label: "src" },
@@ -32,7 +39,7 @@ export function HomeView() {
       />
       <div className="relative min-w-0 flex-1">
         <EditorGutter />
-        <div className="mr-auto min-w-0 max-w-[74rem] px-[clamp(1rem,3.5vw,2.25rem)] py-5 min-[900px]:pl-16 md:py-7">
+        <div className="mr-auto min-w-0 w-full max-w-[74rem] px-[clamp(1rem,3.5vw,2.25rem)] py-5 pb-10 min-[900px]:pl-16 md:py-7">
           <CodeIntro />
           <div className="mt-8 grid min-w-0 items-start gap-10 xl:mt-9 xl:grid-cols-[minmax(0,1.35fr)_minmax(240px,0.65fr)] xl:gap-x-12">
             <div className="min-w-0">
@@ -52,7 +59,7 @@ function CodeIntro() {
   return (
     <div
       aria-hidden="true"
-      className="w-fit max-w-full overflow-x-auto font-mono text-[13px] leading-6 whitespace-nowrap text-fg"
+      className="code-scroll min-w-0 w-full max-w-full overflow-x-auto font-mono text-[13px] leading-6 whitespace-nowrap text-fg"
     >
       <p>
         <span className="text-syntax-comment">
@@ -184,17 +191,18 @@ function TechStack() {
 
 function HomeActions() {
   const { openFile } = useWorkspace()
-  const socialLinks = getVisibleSocialLinks()
+  const github = getContactGitHubUrl()
+  const linkedin = getContactLinkedInUrl()
 
   return (
     <div className="mt-9">
-      <div className="flex flex-col items-stretch gap-2.5 min-[430px]:flex-row min-[430px]:flex-wrap min-[430px]:items-center">
+      <div className="flex flex-col items-stretch gap-2.5 min-[360px]:flex-row min-[360px]:flex-wrap min-[360px]:items-center">
         <button
           type="button"
           onClick={() => {
             openFile(FILE_STUDYSYNC)
           }}
-          className="group inline-flex min-h-11 cursor-pointer items-center justify-center gap-1.5 rounded-[4px] bg-accent px-3.5 py-1.5 text-[13px] font-medium text-app ui-transition hover:bg-accent/90 active:bg-accent/80 md:min-h-0"
+          className="group inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-1.5 rounded-[4px] bg-accent px-3.5 py-1.5 text-[13px] font-medium text-app ui-transition hover:bg-accent/90 active:bg-accent/80 min-[480px]:w-auto md:min-h-0"
         >
           <FolderOpen
             size={14}
@@ -226,7 +234,21 @@ function HomeActions() {
         </button>
       </div>
 
-      <p className="mt-5 font-mono text-[13px]">
+      {github || linkedin ? (
+        <nav
+          aria-label="Professional profiles"
+          className="mt-3.5 flex flex-wrap items-center gap-x-5 gap-y-1 pb-1"
+        >
+          {github ? (
+            <HomeProfileLink href={github} label="GitHub" />
+          ) : null}
+          {linkedin ? (
+            <HomeProfileLink href={linkedin} label="LinkedIn" />
+          ) : null}
+        </nav>
+      ) : null}
+
+      <p className="mt-3.5 font-mono text-[13px]">
         <span aria-hidden="true" className="text-accent">
           {">"}
         </span>
@@ -240,25 +262,28 @@ function HomeActions() {
           {personalInfo.email}
         </a>
       </p>
-
-      {socialLinks.length > 0 ? (
-        <ul className="mt-3 flex flex-wrap gap-3">
-          {socialLinks.map((link) => (
-            <li key={link.id}>
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={`Open ${personalInfo.name}'s ${link.label} profile`}
-                className="font-mono text-[12px] text-fg-muted ui-transition hover:text-fg"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      ) : null}
     </div>
+  )
+}
+
+function HomeProfileLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Open ${personalInfo.name} ${label} profile`}
+      className="inline-flex min-h-11 cursor-pointer items-center gap-1 font-mono text-[12px] leading-none text-fg-secondary no-underline ui-transition [@media(hover:hover)]:hover:text-accent focus-visible:text-accent md:min-h-0 md:py-0.5"
+      data-home-profile=""
+    >
+      <span>{label}</span>
+      <ExternalLink
+        size={12}
+        strokeWidth={1.75}
+        aria-hidden="true"
+        className="shrink-0"
+      />
+    </a>
   )
 }
 

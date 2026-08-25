@@ -41,7 +41,7 @@ export function FileRenderer() {
       className={
         isResume
           ? "flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-editor"
-          : "workspace-scroll min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto bg-editor"
+          : "workspace-scroll min-h-0 min-w-0 w-full max-w-full flex-1 overflow-x-clip overflow-y-auto bg-editor"
       }
     >
       <EditorContentTransition

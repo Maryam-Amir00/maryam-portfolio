@@ -63,8 +63,9 @@ export function MobileActivityNav() {
     <nav
       aria-label="Workspace tools"
       className="shrink-0 border-t border-subtle bg-activity pb-[env(safe-area-inset-bottom)] md:hidden"
+      data-workspace-mobile-chrome=""
     >
-      <div className="flex min-h-[52px]">
+      <div className="flex min-h-[52px] [@media(max-height:500px)]:min-h-11">
       {tools.map((tool) => {
         const Icon = tool.icon
         const pressed =
@@ -81,7 +82,7 @@ export function MobileActivityNav() {
             aria-pressed={pressed}
             onClick={tool.toggle}
             className={[
-              "relative flex min-h-[52px] min-w-0 flex-1 flex-col items-center justify-center gap-0.5 px-1 text-fg-muted ui-transition",
+              "relative flex min-h-[52px] min-w-0 flex-1 flex-col items-center justify-center gap-0.5 px-1 text-fg-muted ui-transition [@media(max-height:500px)]:min-h-11",
               pressed ? "font-medium text-fg" : "hover:text-fg",
             ].join(" ")}
           >

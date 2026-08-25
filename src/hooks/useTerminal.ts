@@ -26,7 +26,7 @@ export function useTerminal() {
   const [announcement, setAnnouncement] = useState("")
   const nextIdRef = useRef(1)
   const inputRef = useRef<HTMLInputElement>(null)
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const scrollerRef = useRef<HTMLDivElement>(null)
 
   const nextId = useCallback(() => {
     const id = `t${nextIdRef.current}`
@@ -39,7 +39,12 @@ export function useTerminal() {
   }, [])
 
   const scrollToBottom = useCallback(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "auto", block: "end" })
+    const scroller = scrollerRef.current
+    if (!scroller) {
+      return
+    }
+
+    scroller.scrollTop = scroller.scrollHeight
   }, [])
 
   const clearOutput = useCallback(() => {
@@ -142,7 +147,7 @@ export function useTerminal() {
 
   return {
     announcement,
-    bottomRef,
+    scrollerRef,
     clearOutput,
     entries,
     focusInput,

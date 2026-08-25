@@ -1,4 +1,11 @@
-import { personalInfo } from "./personalInfo"
+import { contactCopy } from "./contactData"
+import {
+  getContactEmail,
+  getContactGitHubUrl,
+  getContactLinkedInUrl,
+  getContactPhone,
+  personalInfo,
+} from "./personalInfo"
 import {
   FILE_ABOUT,
   FILE_CONTACT,
@@ -12,6 +19,7 @@ import {
   findFileById,
   openedFileLabel,
 } from "./portfolioFiles"
+import { isSafeHttpsUrl } from "../utils/externalLinks"
 import type {
   CommandPaletteAction,
   CommandPaletteGroup,
@@ -35,6 +43,10 @@ export const PALETTE_ACTION_IDS = {
   sourceControl: "workspace-source-control",
   extensions: "workspace-extensions",
   copyEmail: "copy-email",
+  copyPhone: "copy-phone",
+  composeEmail: "compose-email",
+  openLinkedIn: "open-linkedin",
+  openGitHub: "open-github",
 } as const
 
 const CATEGORY_ORDER = ["file", "project", "workspace", "contact"] as const
@@ -112,14 +124,6 @@ export function getCommandPaletteActions(state: {
       "javascript",
       "typescript",
     ]),
-    fileAction(
-      PALETTE_ACTION_IDS.contact,
-      FILE_CONTACT,
-      "Open Contact",
-      "file",
-      "contact",
-      ["contact", "email", "message", "reach"],
-    ),
     fileAction(PALETTE_ACTION_IDS.resume, FILE_RESUME, "Open Resume", "file", "resume", [
       "resume",
       "cv",
@@ -235,18 +239,9 @@ export function getCommandPaletteActions(state: {
       icon: "extensions",
       target: { type: "show-extensions" },
     },
-    {
-      id: PALETTE_ACTION_IDS.copyEmail,
-      label: "Copy Email",
-      description: personalInfo.email,
-      category: "contact",
-      keywords: ["email", "copy", "contact", "address", "mail"],
-      icon: "copy",
-      target: { type: "copy-email" },
-    },
   ]
 
-  return [...fileActions, ...workspaceActions]
+  return [...fileActions, ...workspaceActions, ...getContactActions()]
 }
 
 export function groupCommandPaletteActions(
@@ -292,18 +287,114 @@ export async function executeCommandPaletteAction(
     case "show-extensions":
       context.showExtensions()
       return { restoreFocus: false, focusToolbox: true }
-    case "copy-email":
+    case "copy-text":
       try {
-        await navigator.clipboard.writeText(personalInfo.email)
+        await navigator.clipboard.writeText(action.target.value)
         return {
-          restoreFocus: true,
-          status: "Email copied to clipboard.",
+          restoreFocus: false,
+          keepOpen: true,
+          status: action.target.status,
         }
       } catch {
         return {
-          restoreFocus: true,
-          status: "Could not copy email. The address remains selectable.",
+          restoreFocus: false,
+          keepOpen: true,
+          status: "Could not copy.",
         }
       }
+    case "open-url": {
+      const url = action.target.url
+      if (url.startsWith("mailto:") || isSafeHttpsUrl(url)) {
+        window.open(url, "_blank", "noopener,noreferrer")
+      }
+      return { restoreFocus: true }
+    }
   }
+}
+
+function getContactActions(): CommandPaletteAction[] {
+  const actions: CommandPaletteAction[] = []
+  const contactFile = findFileById(FILE_CONTACT)
+
+  if (contactFile) {
+    actions.push({
+      id: PALETTE_ACTION_IDS.contact,
+      label: "Open Contact",
+      description: openedFileLabel(contactFile),
+      category: "contact",
+      keywords: ["contact", "email", "message", "reach"],
+      icon: "contact",
+      target: { type: "open-file", fileId: FILE_CONTACT },
+    })
+  }
+
+  const email = getContactEmail()
+  if (email) {
+    actions.push({
+      id: PALETTE_ACTION_IDS.copyEmail,
+      label: "Copy Email",
+      description: email,
+      category: "contact",
+      keywords: ["contact", "email", "mail", "message", "copy"],
+      icon: "copy",
+      target: { type: "copy-text", value: email, status: "Email copied" },
+    })
+  }
+
+  const phone = getContactPhone()
+  if (phone) {
+    actions.push({
+      id: PALETTE_ACTION_IDS.copyPhone,
+      label: "Copy Phone",
+      description: phone.display,
+      category: "contact",
+      keywords: ["contact", "phone", "call", "copy"],
+      icon: "phone",
+      target: {
+        type: "copy-text",
+        value: personalInfo.phone,
+        status: "Phone copied",
+      },
+    })
+  }
+
+  if (email) {
+    actions.push({
+      id: PALETTE_ACTION_IDS.composeEmail,
+      label: "Compose Email",
+      description: email,
+      category: "contact",
+      keywords: ["email", "message", "contact", "compose", "mail"],
+      icon: "send",
+      target: { type: "open-url", url: `mailto:${email}` },
+    })
+  }
+
+  const linkedin = getContactLinkedInUrl()
+  if (linkedin) {
+    actions.push({
+      id: PALETTE_ACTION_IDS.openLinkedIn,
+      label: "Open LinkedIn",
+      description: contactCopy.linkedinAction,
+      category: "contact",
+      keywords: ["contact", "linkedin", "profile", "social"],
+      icon: "external",
+      target: { type: "open-url", url: linkedin },
+    })
+  }
+
+  const github = getContactGitHubUrl()
+  if (github) {
+    actions.push({
+      id: PALETTE_ACTION_IDS.openGitHub,
+      label: "Open GitHub",
+      description: contactCopy.githubAction,
+      category: "contact",
+      keywords: ["contact", "github", "profile", "social"],
+      icon: "external",
+      target: { type: "open-url", url: github },
+    })
+  }
+
+  return actions
 }

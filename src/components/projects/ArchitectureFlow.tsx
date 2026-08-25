@@ -16,7 +16,7 @@ export function ArchitectureFlow({
       </p>
       <div
         aria-hidden="true"
-        className="flex min-w-0 flex-col @min-[52rem]:flex-row @min-[52rem]:items-stretch"
+        className="flex min-w-0 flex-col @min-[56.25rem]:flex-row @min-[56.25rem]:items-stretch"
       >
         {layers.map((layer, index) => (
           <Fragment key={layer.id}>
@@ -36,7 +36,7 @@ export function ArchitectureFlow({
               </ul>
             </div>
             {index < layers.length - 1 ? (
-              <div className="flex shrink-0 flex-col items-center justify-center gap-1 px-0 py-3 @min-[52rem]:px-3 @min-[52rem]:py-0">
+              <div className="flex shrink-0 flex-col items-center justify-center gap-1 px-0 py-3 @min-[56.25rem]:px-3 @min-[56.25rem]:py-0">
                 {layer.outgoing ? (
                   <span className="font-mono text-[10px] tracking-[0.08em] text-fg-muted uppercase">
                     {layer.outgoing}
@@ -45,12 +45,12 @@ export function ArchitectureFlow({
                 <ArrowDown
                   size={16}
                   strokeWidth={1.75}
-                  className="text-fg-muted @min-[52rem]:hidden"
+                  className="text-fg-muted @min-[56.25rem]:hidden"
                 />
                 <ArrowRight
                   size={16}
                   strokeWidth={1.75}
-                  className="hidden text-fg-muted @min-[52rem]:block"
+                  className="hidden text-fg-muted @min-[56.25rem]:block"
                 />
               </div>
             ) : null}

@@ -6,7 +6,6 @@ export function EngineeringDecisionList({
   approachLabel = "approach",
   outcomeLabel = "why",
   roomy = false,
-  stackUntilWide = false,
 }: {
   decisions: readonly EngineeringDecision[]
   problemLabel?: string
@@ -32,10 +31,8 @@ export function EngineeringDecisionList({
           <dl
             className={
               roomy
-                ? "mt-5 grid gap-5 min-[1080px]:grid-cols-3 min-[1080px]:gap-x-8"
-                : stackUntilWide
-                  ? "mt-4 grid gap-4 min-[1080px]:grid-cols-3"
-                  : "mt-4 grid gap-4 min-[900px]:grid-cols-3"
+                ? "mt-5 grid gap-5 @min-[56.25rem]:grid-cols-3 @min-[56.25rem]:gap-x-8"
+                : "mt-4 grid gap-4 @min-[56.25rem]:grid-cols-3"
             }
           >
             <div className="min-w-0">

@@ -252,12 +252,7 @@ export function whoamiLines() {
   return [
     personalInfo.name,
     personalInfo.role,
-    "",
-    "Primary stack:",
     personalInfo.stack.join(" · "),
-    "",
-    "Location:",
-    personalInfo.location,
   ]
 }
 
@@ -285,7 +280,7 @@ export function executeCommand(
   if (!command) {
     return error([
       `command not found: ${name}`,
-      'Type "help" to see available portfolio commands.',
+      'Type "help" to see available commands.',
     ])
   }
 
@@ -295,7 +290,7 @@ export function executeCommand(
 export function announceEntry(entry: TerminalEntryDraft) {
   switch (entry.kind) {
     case "welcome":
-      return "Maryam Portfolio Terminal. Type help to explore."
+      return "Maryam Portfolio Terminal. Type help to see available commands."
     case "command":
       return ""
     case "text":

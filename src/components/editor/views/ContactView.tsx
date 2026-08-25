@@ -52,11 +52,11 @@ const sectionCommentClass =
   "font-mono text-[13px] leading-5 text-[color-mix(in_srgb,var(--syntax-comment)_68%,white)]"
 
 const fieldSurfaceClass =
-  "a11y-scroll-target mt-1.5 w-full rounded-[4px] border bg-app px-3 py-2 text-base text-fg caret-accent ui-transition placeholder:text-fg-muted focus-visible:border-accent md:text-[14px]"
+  "a11y-scroll-target mt-1.5 box-border w-full max-w-full rounded-[4px] border bg-app px-3 py-2 text-base text-fg caret-accent ui-transition placeholder:text-fg-muted focus-visible:border-accent md:text-[14px]"
 
 export function ContactView() {
   return (
-    <div className="flex min-h-full min-w-0 flex-col overflow-x-hidden">
+    <div className="flex min-h-full min-w-0 flex-col overflow-x-clip">
       <EditorBreadcrumbs
         items={[
           { label: "src" },
@@ -66,7 +66,7 @@ export function ContactView() {
       <article className="@container mr-auto min-w-0 w-full max-w-[70rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
         <CodeIntro />
         <Header />
-        <div className="mt-8 grid min-w-0 items-stretch gap-10 @min-[42rem]:grid-cols-[minmax(15rem,0.32fr)_minmax(0,0.68fr)] @min-[42rem]:gap-0">
+        <div className="mt-8 grid min-w-0 items-stretch gap-10 @min-[56.25rem]:grid-cols-[minmax(15rem,0.32fr)_minmax(0,0.68fr)] @min-[56.25rem]:gap-0">
           <ContactDetails />
           <ContactForm />
         </div>
@@ -102,7 +102,7 @@ function CodeIntro() {
   return (
     <div
       aria-hidden="true"
-      className="max-w-[42rem] overflow-x-auto font-mono text-[12px] leading-6 text-fg md:text-[13px]"
+      className="code-scroll max-w-[42rem] overflow-x-auto font-mono text-[12px] leading-6 text-fg md:text-[13px]"
     >
       <p>
         <span className="text-syntax-keyword">const</span>
@@ -149,7 +149,7 @@ function ContactDetails() {
   return (
     <section
       aria-label="Direct channels"
-      className="min-w-0 @min-[42rem]:pr-8 @min-[56rem]:pr-10"
+      className="min-w-0 @min-[56.25rem]:pr-8 @min-[60rem]:pr-10"
     >
       <p aria-hidden="true" className={sectionCommentClass}>
         {contactCopy.channelsComment}
@@ -430,7 +430,7 @@ function ContactForm() {
   return (
     <section
       aria-label="Message composer"
-      className="min-w-0 @min-[42rem]:border-l @min-[42rem]:border-subtle @min-[42rem]:pl-8 @min-[56rem]:pl-10"
+      className="min-w-0 @min-[56.25rem]:border-l @min-[56.25rem]:border-subtle @min-[56.25rem]:pl-8 @min-[60rem]:pl-10"
     >
       <p aria-hidden="true" className={sectionCommentClass}>
         {contactCopy.composeComment}
@@ -611,7 +611,7 @@ function MessageField({
       <textarea
         id="contact-message"
         ref={ref}
-        rows={7}
+        rows={6}
         required
         maxLength={CONTACT_LIMITS.messageMax}
         placeholder={contactCopy.placeholders.message}
@@ -621,7 +621,7 @@ function MessageField({
         onChange={(event) => {
           onChange(event.target.value)
         }}
-        className={`${fieldSurfaceClass} min-h-[10.5rem] resize-y leading-6 md:min-h-0 ${
+        className={`${fieldSurfaceClass} min-h-[8rem] resize-y leading-6 md:min-h-[10.5rem] ${
           invalid ? "border-error" : "border-fg-muted/45"
         }`}
       />

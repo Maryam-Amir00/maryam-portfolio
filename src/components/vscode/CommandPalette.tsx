@@ -4,13 +4,16 @@ import {
   BriefcaseBusiness,
   Code2,
   Copy,
+  ExternalLink,
   FileDown,
   Files,
   FileText,
   GitBranch,
   Home,
   Mail,
+  Phone,
   Search,
+  Send,
   SquareTerminal,
 } from "lucide-react"
 import { AnimatePresence, m, useReducedMotion } from "framer-motion"
@@ -25,8 +28,6 @@ import {
   motionDuration,
   motionEase,
   paletteOverlay,
-  paletteSurface,
-  paletteSurfaceReduced,
 } from "../../config/motion"
 import { CATEGORY_HINT } from "../../data/commandPaletteActions"
 import { useCommandPalette } from "../../hooks/useCommandPalette"
@@ -39,6 +40,25 @@ import type {
 import { COMMAND_PALETTE_LISTBOX_ID } from "../../types/commandPalette"
 
 const optionId = (actionId: string) => `command-palette-option-${actionId}`
+
+function scrollOptionIntoList(option: HTMLElement) {
+  const scroller = option.closest(`#${COMMAND_PALETTE_LISTBOX_ID}`)
+  if (!(scroller instanceof HTMLElement)) {
+    return
+  }
+
+  const optionRect = option.getBoundingClientRect()
+  const scrollerRect = scroller.getBoundingClientRect()
+
+  if (optionRect.top < scrollerRect.top) {
+    scroller.scrollTop += optionRect.top - scrollerRect.top
+    return
+  }
+
+  if (optionRect.bottom > scrollerRect.bottom) {
+    scroller.scrollTop += optionRect.bottom - scrollerRect.bottom
+  }
+}
 
 function isPaletteShortcut(event: globalThis.KeyboardEvent) {
   return (
@@ -69,6 +89,7 @@ export function CommandPalette() {
   const inputRef = useRef<HTMLInputElement>(null)
   const selectedOptionRef = useRef<HTMLDivElement | null>(null)
   const wasVisibleRef = useRef(false)
+  const navigationSourceRef = useRef<"keyboard" | "pointer">("keyboard")
 
   useEffect(() => {
     function onKeyDown(event: globalThis.KeyboardEvent) {
@@ -94,6 +115,7 @@ export function CommandPalette() {
 
   useEffect(() => {
     if (commandPaletteVisible && !wasVisibleRef.current) {
+      navigationSourceRef.current = "keyboard"
       inputRef.current?.focus()
     }
 
@@ -105,7 +127,13 @@ export function CommandPalette() {
       return
     }
 
-    selectedOptionRef.current?.scrollIntoView({ block: "nearest" })
+    if (navigationSourceRef.current !== "keyboard") {
+      return
+    }
+
+    if (selectedOptionRef.current) {
+      scrollOptionIntoList(selectedOptionRef.current)
+    }
   }, [commandPaletteVisible, selectedIndex])
 
   useEffect(() => {
@@ -133,12 +161,14 @@ export function CommandPalette() {
   function handleInputKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "ArrowDown") {
       event.preventDefault()
+      navigationSourceRef.current = "keyboard"
       moveSelection(1)
       return
     }
 
     if (event.key === "ArrowUp") {
       event.preventDefault()
+      navigationSourceRef.current = "keyboard"
       moveSelection(-1)
       return
     }
@@ -154,6 +184,11 @@ export function CommandPalette() {
     }
   }
 
+  function highlightFromPointer(index: number) {
+    navigationSourceRef.current = "pointer"
+    setSelectedIndex(index)
+  }
+
   function handleOverlayMouseDown(event: ReactMouseEvent<HTMLDivElement>) {
     if (event.target === event.currentTarget) {
       closeAndReset(true)
@@ -162,7 +197,6 @@ export function CommandPalette() {
 
   const selectedId = selectedAction ? optionId(selectedAction.id) : undefined
   const reduceMotion = useReducedMotion()
-  const surface = reduceMotion ? paletteSurfaceReduced : paletteSurface
 
   return (
     <>
@@ -173,7 +207,7 @@ export function CommandPalette() {
         {commandPaletteVisible ? (
           <m.div
             key="command-palette"
-            className="isolate fixed inset-0 z-[var(--z-command-palette)] bg-black/40"
+            className="isolate fixed inset-0 z-[var(--z-command-palette)] overflow-hidden bg-black/40"
             initial={paletteOverlay.initial}
             animate={paletteOverlay.animate}
             exit={{
@@ -189,28 +223,15 @@ export function CommandPalette() {
             }}
             onMouseDown={handleOverlayMouseDown}
           >
-            <m.div
+            <div
               role="dialog"
               aria-modal="true"
               aria-label="Command Palette"
               data-command-palette=""
-              initial={surface.initial}
-              animate={surface.animate}
-              exit={{
-                ...surface.exit,
-                transition: {
-                  duration: reduceMotion ? 0 : motionDuration.paletteExit,
-                  ease: motionEase,
-                },
-              }}
-              transition={{
-                duration: reduceMotion ? 0 : motionDuration.palette,
-                ease: motionEase,
-              }}
-              className="mx-auto mt-[max(2.75rem,10vh)] w-[min(640px,calc(100vw-1.5rem))] overflow-hidden rounded-[6px] border border-subtle bg-editor shadow-[0_12px_40px_rgba(0,0,0,0.45)] max-md:mt-[calc(env(safe-area-inset-top)+3.75rem)] max-md:max-h-[70dvh] max-md:w-[calc(100vw-1.5rem)]"
+              className="palette-surface-in mx-auto mt-[max(2.75rem,8vh)] w-[min(620px,calc(100vw-2rem))] max-h-[min(72dvh,40rem)] overflow-hidden rounded-[6px] border border-subtle bg-editor shadow-[0_12px_40px_rgba(0,0,0,0.45)] max-md:mt-[calc(env(safe-area-inset-top)+3.75rem)] max-md:max-h-[min(68dvh,32rem)] max-md:w-[calc(100vw-1.5rem)]"
               onMouseDown={(event) => event.stopPropagation()}
             >
-            <div className="flex items-center gap-2 border-b border-subtle px-3">
+            <div className="flex items-center gap-2 border-b border-subtle px-3 focus-within:border-accent">
               <span aria-hidden="true" className="select-none text-fg-muted">
                 &gt;
               </span>
@@ -225,13 +246,16 @@ export function CommandPalette() {
                 aria-autocomplete="list"
                 placeholder="Search commands and files..."
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
+                onChange={(event) => {
+                  navigationSourceRef.current = "keyboard"
+                  setQuery(event.target.value)
+                }}
                 onKeyDown={handleInputKeyDown}
                 autoComplete="off"
                 autoCapitalize="none"
                 autoCorrect="off"
                 spellCheck={false}
-                className="h-11 min-w-0 flex-1 border-0 bg-transparent text-base text-fg caret-accent placeholder:text-fg-muted md:text-[13px]"
+                className="h-11 min-w-0 flex-1 border-0 bg-transparent text-base text-fg caret-accent placeholder:text-fg-muted focus-visible:outline-none md:text-[13px]"
               />
             </div>
 
@@ -242,14 +266,14 @@ export function CommandPalette() {
               selectedOptionRef={selectedOptionRef}
               selectedIndex={selectedIndex}
               visibleActions={visibleActions}
-              onHighlight={setSelectedIndex}
+              onHighlight={highlightFromPointer}
               onSelect={(action) => {
                 void executeAction(action)
               }}
             />
 
             <CommandPaletteFooter />
-            </m.div>
+            </div>
           </m.div>
         ) : null}
       </AnimatePresence>
@@ -298,7 +322,7 @@ function CommandPaletteResults({
       id={COMMAND_PALETTE_LISTBOX_ID}
       role="listbox"
       aria-label="Commands"
-      className="workspace-scroll max-h-[min(380px,50vh)] overflow-y-auto overscroll-contain py-1 max-md:max-h-[min(48dvh,24rem)]"
+      className="workspace-scroll max-h-[min(380px,48vh)] overflow-y-auto overscroll-contain py-1 [scrollbar-gutter:stable] max-md:max-h-[min(48dvh,22rem)] [@media(max-height:699px)]:max-h-[min(240px,40vh)]"
     >
       {isSearching
         ? visibleActions.map((action, index) => (
@@ -367,13 +391,17 @@ function CommandPaletteItem({
       onMouseEnter={() => onHighlight(index)}
       onClick={() => onSelect(action)}
       className={[
-        "flex min-h-11 cursor-pointer items-center gap-2.5 border-l-2 px-3 py-2.5 md:min-h-0 md:py-1.5",
-        selected
-          ? "border-accent bg-hover text-fg"
-          : "border-transparent text-fg-secondary",
+        "relative flex min-h-11 cursor-pointer items-center gap-2.5 px-3 py-2.5 md:min-h-0 md:py-1.5",
+        selected ? "bg-hover text-fg" : "text-fg-secondary",
         "ui-transition",
       ].join(" ")}
     >
+      {selected ? (
+        <span
+          aria-hidden="true"
+          className="absolute inset-y-0 left-0 w-0.5 bg-accent"
+        />
+      ) : null}
       <PaletteIcon name={action.icon} />
       <span className="min-w-0 flex-1">
         <span className="block truncate text-[13px] text-fg">{action.label}</span>
@@ -425,6 +453,12 @@ function PaletteIcon({ name }: { name: CommandPaletteIconName }) {
       return <Blocks {...props} />
     case "copy":
       return <Copy {...props} />
+    case "phone":
+      return <Phone {...props} />
+    case "send":
+      return <Send {...props} />
+    case "external":
+      return <ExternalLink {...props} />
   }
 }
 

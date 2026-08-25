@@ -125,6 +125,61 @@ textarea:focus-visible {
   outline-offset: -2px;
 }
 
+[data-command-palette] input:focus-visible {
+  outline: none;
+}
+
+[data-workspace-search],
+[data-workspace-toolbox] {
+  border-width: 1px;
+  box-shadow: none;
+}
+
+[data-workspace-search]:focus-within,
+[data-workspace-toolbox]:focus-within {
+  border-color: color-mix(in srgb, var(--accent) 86%, var(--bg-app));
+  box-shadow: none;
+  outline: none;
+}
+
+[data-workspace-search] input:focus-visible,
+[data-workspace-toolbox] input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+[data-workspace-search-row]:focus-visible {
+  outline: none;
+}
+
+[data-workspace-toolbox-link]:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+[data-workspace-toolbox-section]:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+[data-home-profile]:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--accent) 72%, transparent);
+  outline-offset: 3px;
+  border-radius: 2px;
+  box-shadow: none;
+}
+
+[data-terminal] input,
+[data-terminal] input:focus,
+[data-terminal] input:focus-visible {
+  border: none;
+  outline: none;
+  outline-offset: 0;
+  box-shadow: none;
+  background: transparent;
+  border-radius: 0;
+}
+
 ::selection {
   background-color: color-mix(in srgb, var(--accent) 42%, transparent);
   color: var(--text-primary);
@@ -172,6 +227,21 @@ textarea:-webkit-autofill {
   display: none;
 }
 
+.code-scroll {
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-subtle) transparent;
+}
+
+.code-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 8px;
+}
+
 .terminal-mono {
   font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas,
     "Liberation Mono", monospace;
@@ -194,6 +264,14 @@ textarea:-webkit-autofill {
 .workspace-scroll::-webkit-scrollbar-thumb {
   background: var(--border-subtle);
   border-radius: 8px;
+}
+
+[data-terminal] .workspace-scroll {
+  scrollbar-width: thin;
+}
+
+[data-terminal] .workspace-scroll::-webkit-scrollbar {
+  width: 8px;
 }
 
 @utility ui-transition {
@@ -251,6 +329,17 @@ textarea:-webkit-autofill {
   }
 }
 
+@keyframes palette-surface-in {
+  from {
+    opacity: 0.92;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes sidebar-overlay-in {
   from {
     opacity: 0.92;
@@ -273,13 +362,26 @@ textarea:-webkit-autofill {
   }
 }
 
-@media (max-width: 1023px) {
-  .sidebar-overlay-in {
-    animation: sidebar-overlay-in 140ms var(--ease-ui);
+.palette-surface-in {
+  animation: palette-surface-in 180ms var(--ease-ui);
+}
+
+@media (max-width: 767px), ((max-height: 500px) and (max-width: 959px)) {
+  [data-workspace-desktop-chrome] {
+    display: none !important;
+  }
+
+  [data-workspace-mobile-chrome] {
+    display: flex !important;
+    flex-direction: column;
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1279px) {
+  .sidebar-overlay-in {
+    animation: sidebar-overlay-in 140ms var(--ease-ui);
+  }
+
   .terminal-overlay-in {
     animation: terminal-overlay-in 150ms var(--ease-ui);
   }
@@ -288,6 +390,7 @@ textarea:-webkit-autofill {
 @media (prefers-reduced-motion: reduce) {
   .sidebar-overlay-in,
   .terminal-overlay-in,
+  .palette-surface-in,
   .home-editor-caret {
     animation: none !important;
   }

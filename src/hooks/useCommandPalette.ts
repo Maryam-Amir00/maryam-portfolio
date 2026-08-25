@@ -154,6 +154,10 @@ export function useCommandPalette() {
         setStatus(result.status)
       }
 
+      if (result.keepOpen) {
+        return
+      }
+
       closeAndReset(result.restoreFocus)
 
       if (action.target.type === "open-file") {

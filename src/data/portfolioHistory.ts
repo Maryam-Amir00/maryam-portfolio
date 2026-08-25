@@ -1,4 +1,4 @@
-import { education } from "./aboutData"
+import { education, quickProfile } from "./aboutData"
 import {
   currentExperience,
   formatExperiencePeriod,
@@ -23,7 +23,7 @@ export type PortfolioHistoryKind = "career" | "education" | "project"
 export type CurrentSnapshot = {
   name: string
   role: string
-  direction: string
+  stack: string
   location: string
   relatedFileId: string
 }
@@ -33,21 +33,21 @@ export type PortfolioHistoryEntry = {
   kind: PortfolioHistoryKind
   title: string
   subtitle?: string
-  focus?: string
   period?: string
   location?: string
-  summary: string
-  highlights?: readonly string[]
+  proof?: string
   technologies?: readonly string[]
-  metric?: string
-  isCurrent?: boolean
   relatedFileId: string
 }
+
+const educationTitle =
+  quickProfile.find((item) => item.label === "education")?.value ??
+  education.degree
 
 export const currentSnapshot: CurrentSnapshot = {
   name: personalInfo.name,
   role: personalInfo.role,
-  direction: personalInfo.specialization,
+  stack: personalInfo.displayStack.slice(0, 3).join(" · "),
   location: personalInfo.location,
   relatedFileId: FILE_HOME,
 }
@@ -60,15 +60,8 @@ export const careerMilestones: readonly PortfolioHistoryEntry[] = [
     subtitle: currentExperience.company,
     period: formatExperiencePeriod(currentExperience),
     location: currentExperience.location,
-    summary:
-      "Frontend engineering for a multi tenant POS SaaS environment across reusable UI architecture, authentication, dashboards, and API driven application flows.",
-    highlights: [
-      "Reusable React architecture",
-      "JWT / RBAC flows",
-      "Dashboard and API driven UI",
-    ],
+    proof: "Reusable UI, authentication, dashboards",
     technologies: ["React", "JWT", "TanStack Query"],
-    isCurrent: currentExperience.employmentStatus === "current",
     relatedFileId: FILE_EXPERIENCE,
   },
 ]
@@ -77,11 +70,10 @@ export const educationMilestones: readonly PortfolioHistoryEntry[] = [
   {
     id: "education-bs-it",
     kind: "education",
-    title: education.degree,
+    title: educationTitle,
     subtitle: education.school,
     period: education.dates,
     location: education.location,
-    summary: `${education.degree} at ${education.school}.`,
     relatedFileId: FILE_ABOUT,
   },
 ]
@@ -92,10 +84,7 @@ export const projectSnapshots: readonly PortfolioHistoryEntry[] = [
     kind: "project",
     title: studySyncProject.name,
     subtitle: studySyncProject.subtitle,
-    focus: "Full Stack Engineering",
-    summary:
-      "React + Django REST Framework application using PostgreSQL, TanStack Query, TanStack Router and JWT based authentication.",
-    technologies: studySyncProject.introStack,
+    technologies: studySyncProject.introStack.slice(0, 4),
     relatedFileId: FILE_STUDYSYNC,
   },
   {
@@ -103,11 +92,7 @@ export const projectSnapshots: readonly PortfolioHistoryEntry[] = [
     kind: "project",
     title: movixxxProject.name,
     subtitle: movixxxProject.subtitle,
-    focus: "Frontend Data Flow",
-    summary:
-      "React application using the OMDb API, debounced search and persistent watchlist state.",
     technologies: ["React", "OMDb API", "Context API"],
-    metric: `${movixxxProject.metric.value} ${movixxxProject.metric.label}`,
     relatedFileId: FILE_MOVIXXX,
   },
   {
@@ -115,11 +100,7 @@ export const projectSnapshots: readonly PortfolioHistoryEntry[] = [
     kind: "project",
     title: styliqueProject.name,
     subtitle: styliqueProject.subtitle,
-    focus: styliqueProject.role,
-    summary:
-      "React storefront using Context API, React Router, persistent cart/wishlist state and a mobile first reusable UI structure.",
-    technologies: styliqueProject.introStack,
-    metric: "10+ routed views",
+    technologies: styliqueProject.introStack.slice(0, 4),
     relatedFileId: FILE_STYLIQUE,
   },
 ]

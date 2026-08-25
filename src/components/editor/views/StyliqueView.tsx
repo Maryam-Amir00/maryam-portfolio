@@ -24,7 +24,7 @@ const links = getSafeProjectLinks(project)
 
 export function StyliqueView() {
   return (
-    <div className="flex min-h-full min-w-0 flex-col overflow-x-hidden">
+    <div className="flex min-h-full min-w-0 flex-col overflow-x-clip">
       <EditorBreadcrumbs
         items={[
           { label: "src" },
@@ -32,7 +32,7 @@ export function StyliqueView() {
           { label: project.fileName, current: true },
         ]}
       />
-      <article className="mr-auto min-w-0 w-full max-w-[64rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
+      <article className="@container mr-auto min-w-0 w-full max-w-[64rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
         <div className="border-b border-subtle pb-10 md:pb-12">
           <CodeIntro />
           <Header />
@@ -101,7 +101,7 @@ function CodeIntro() {
   return (
     <div
       aria-hidden="true"
-      className="max-w-[44rem] font-mono text-[12px] leading-6 text-fg md:text-[13px]"
+      className="code-scroll max-w-[44rem] overflow-x-auto font-mono text-[12px] leading-6 text-fg md:text-[13px]"
     >
       <p className="text-syntax-comment">{"// stylique.jsx"}</p>
       <p className="mt-1">
@@ -178,7 +178,10 @@ function StructureTree({
   return (
     <div>
       <p className="sr-only">{description}</p>
-      <div aria-hidden="true" className="min-w-0 font-mono text-[13px] leading-7">
+      <div
+        aria-hidden="true"
+        className="code-scroll min-w-0 overflow-x-auto font-mono text-[13px] leading-7"
+      >
         <p className="text-fg">{root}</p>
         <ul className="mt-1">
           {branches.map((branch, index) => (
@@ -320,7 +323,7 @@ function PersistenceSection() {
       <p className="sr-only">{project.persistence.flowDescription}</p>
       <div
         aria-hidden="true"
-        className="mt-6 grid gap-8 min-[880px]:grid-cols-2 min-[880px]:gap-x-12"
+        className="mt-6 grid gap-8 @min-[52rem]:grid-cols-2 @min-[52rem]:gap-x-12"
       >
         <StageColumn
           heading="current session"
@@ -331,7 +334,7 @@ function PersistenceSection() {
           stages={project.persistence.restoreFlow}
         />
       </div>
-      <dl className="mt-8 grid gap-5 min-[800px]:grid-cols-2 min-[800px]:gap-x-12">
+      <dl className="mt-8 grid gap-5 @min-[48rem]:grid-cols-2 @min-[48rem]:gap-x-12">
         <div className="min-w-0 border-t border-subtle pt-3">
           <dt className="font-mono text-[13px] text-syntax-property">
             Shared state
@@ -391,7 +394,7 @@ function ReuseSection() {
       <p className="sr-only">{project.reuse.comparisonDescription}</p>
       <div
         aria-hidden="true"
-        className="mt-6 grid gap-8 min-[800px]:grid-cols-2 min-[800px]:gap-x-12"
+        className="mt-6 grid gap-8 @min-[48rem]:grid-cols-2 @min-[48rem]:gap-x-12"
       >
         <div className="min-w-0">
           <p className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">
@@ -446,11 +449,11 @@ function MobileFirstSection() {
       <p className="sr-only">{project.mobileFirst.description}</p>
       <ol
         aria-hidden="true"
-        className="mt-6 flex min-w-0 flex-col min-[800px]:flex-row min-[800px]:items-stretch"
+        className="mt-6 flex min-w-0 flex-col @min-[48rem]:flex-row @min-[48rem]:items-stretch"
       >
         {project.mobileFirst.stages.map((stage, index) => (
           <Fragment key={stage.id}>
-            <li className="min-w-0 flex-1 border-l border-subtle py-2 pl-3 min-[800px]:border-t min-[800px]:border-l-0 min-[800px]:px-0 min-[800px]:pt-3 min-[800px]:pb-0">
+            <li className="min-w-0 flex-1 border-l border-subtle py-2 pl-3 @min-[48rem]:border-t @min-[48rem]:border-l-0 @min-[48rem]:px-0 @min-[48rem]:pt-3 @min-[48rem]:pb-0">
               <p className="font-mono text-[12px] font-medium tracking-[0.12em] text-fg uppercase">
                 {stage.label}
               </p>
@@ -459,16 +462,16 @@ function MobileFirstSection() {
               </p>
             </li>
             {index < project.mobileFirst.stages.length - 1 ? (
-              <li className="flex shrink-0 items-center px-0 py-2 pl-3 min-[800px]:px-2.5 min-[800px]:py-0 min-[800px]:pl-0">
+              <li className="flex shrink-0 items-center px-0 py-2 pl-3 @min-[48rem]:px-2.5 @min-[48rem]:py-0 @min-[48rem]:pl-0">
                 <ArrowDown
                   size={16}
                   strokeWidth={1.75}
-                  className="text-fg-muted min-[800px]:hidden"
+                  className="text-fg-muted @min-[48rem]:hidden"
                 />
                 <ArrowRight
                   size={16}
                   strokeWidth={1.75}
-                  className="hidden text-fg-muted min-[800px]:block"
+                  className="hidden text-fg-muted @min-[48rem]:block"
                 />
               </li>
             ) : null}
@@ -506,7 +509,7 @@ function HighlightsSection() {
         {project.features.map((feature) => (
           <li
             key={feature.id}
-            className="grid gap-1 py-3 min-[640px]:grid-cols-[2.25rem_minmax(0,15rem)_minmax(0,1fr)] min-[640px]:items-baseline min-[640px]:gap-4"
+            className="grid gap-1 py-3 @min-[40rem]:grid-cols-[2.25rem_minmax(0,15rem)_minmax(0,1fr)] @min-[40rem]:items-baseline @min-[40rem]:gap-4"
           >
             <span className="font-mono text-[12px] text-fg-muted">
               {feature.index}
@@ -550,7 +553,7 @@ function InlineFlow({
       <p className="sr-only">{description}</p>
       <ol
         aria-hidden="true"
-        className="flex min-w-0 flex-col gap-1 min-[800px]:flex-row min-[800px]:flex-wrap min-[800px]:items-center min-[800px]:gap-x-2 min-[800px]:gap-y-2"
+        className="flex min-w-0 flex-col gap-1 @min-[48rem]:flex-row @min-[48rem]:flex-wrap @min-[48rem]:items-center @min-[48rem]:gap-x-2 @min-[48rem]:gap-y-2"
       >
         {stages.map((stage, index) => (
           <Fragment key={stage.id}>
@@ -558,16 +561,16 @@ function InlineFlow({
               {stage.label}
             </li>
             {index < stages.length - 1 ? (
-              <li className="flex text-fg-muted min-[800px]:items-center">
+              <li className="flex text-fg-muted @min-[48rem]:items-center">
                 <ArrowDown
                   size={12}
                   strokeWidth={1.75}
-                  className="min-[800px]:hidden"
+                  className="@min-[48rem]:hidden"
                 />
                 <ArrowRight
                   size={12}
                   strokeWidth={1.75}
-                  className="hidden min-[800px]:block"
+                  className="hidden @min-[48rem]:block"
                 />
               </li>
             ) : null}
@@ -611,7 +614,7 @@ function ChallengesSection() {
         {challenges.map((item) => (
           <li
             key={item.id}
-            className="grid gap-4 py-5 min-[800px]:grid-cols-2 min-[800px]:gap-10"
+            className="grid gap-4 py-5 @min-[48rem]:grid-cols-2 @min-[48rem]:gap-10"
           >
             <div className="min-w-0">
               <p className="font-mono text-[11px] tracking-[0.08em] text-syntax-property">
@@ -645,7 +648,7 @@ function StackSection() {
       <ProjectSectionHeading comment="stack">
         Project Stack
       </ProjectSectionHeading>
-      <dl className="grid gap-x-10 gap-y-4 min-[720px]:grid-cols-2 min-[1080px]:grid-cols-3">
+      <dl className="grid gap-x-10 gap-y-4 @min-[42rem]:grid-cols-2 @min-[56.25rem]:grid-cols-3">
         {project.stackGroups.map((item) => (
           <div key={item.id} className="min-w-0 border-t border-subtle pt-3">
             <dt className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">
@@ -668,7 +671,7 @@ function DemonstratesSection() {
       <p className="max-w-[44rem] text-[15px] leading-[1.7] text-fg-secondary">
         {project.demonstratesIntro}
       </p>
-      <dl className="mt-6 grid gap-x-10 gap-y-4 min-[720px]:grid-cols-2 min-[1080px]:grid-cols-3">
+      <dl className="mt-6 grid gap-x-10 gap-y-4 @min-[42rem]:grid-cols-2 @min-[56.25rem]:grid-cols-3">
         {project.demonstrates.map((item) => (
           <div key={item.id} className="min-w-0 border-t border-subtle pt-3">
             <dt className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">

@@ -38,6 +38,7 @@ export function ActivityBar() {
     <nav
       aria-label="Activity bar"
       className="hidden w-12 shrink-0 flex-col border-r border-subtle bg-activity md:flex"
+      data-workspace-desktop-chrome=""
     >
       <div className="flex flex-col p-px">
         {topItems.map((item) => {

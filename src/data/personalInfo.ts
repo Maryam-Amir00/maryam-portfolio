@@ -74,6 +74,11 @@ export function getVisibleSocialLinks() {
     .filter((link) => link !== null)
 }
 
+export function getContactEmail() {
+  const email = personalInfo.email.trim()
+  return email ? email : undefined
+}
+
 export function getContactPhone() {
   const display = personalInfo.phone.trim()
   const href = toTelHref(display)

@@ -1,4 +1,4 @@
-import { Info } from "lucide-react"
+import type { ReactNode } from "react"
 import {
   careerMilestones,
   currentSnapshot,
@@ -8,9 +8,20 @@ import {
 } from "../../data/portfolioHistory"
 import { findFileById, openedFileLabel } from "../../data/portfolioFiles"
 import { useWorkspace } from "../../hooks/useWorkspace"
+import type { PortfolioFile } from "../../types/workspace"
 import { FileIcon } from "./FileIcon"
 import { SidebarPanel } from "./SidebarPanel"
-import { accessibleMetricValue } from "../../utils/accessibleMetric"
+
+const sectionHeadingClass =
+  "text-[11px] font-medium tracking-[0.14em] text-fg-muted uppercase"
+
+const milestoneTitleClass =
+  "block text-[13px] leading-5 break-words text-fg group-hover:font-medium group-focus-visible:font-medium"
+
+const supportingClass =
+  "mt-0.5 block text-[12px] leading-4 break-words text-fg-secondary"
+
+const metaClass = "block text-[11px] leading-4 break-words text-fg-muted"
 
 export function SourceControlPanel() {
   const { sourceControlVisible, openFile, activeFileId } = useWorkspace()
@@ -19,6 +30,9 @@ export function SourceControlPanel() {
     return null
   }
 
+  const snapshotFile = findFileById(currentSnapshot.relatedFileId)
+  const snapshotActive = activeFileId === currentSnapshot.relatedFileId
+
   return (
     <SidebarPanel
       label="Source Control portfolio history"
@@ -26,19 +40,44 @@ export function SourceControlPanel() {
     >
       <div className="flex min-h-0 flex-1 flex-col">
         <PortfolioHistoryNotice />
-        <div className="workspace-scroll min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain pb-3">
-          <CurrentSnapshot
-            isActive={activeFileId === currentSnapshot.relatedFileId}
-            onOpen={() => {
-              openFile(currentSnapshot.relatedFileId)
-            }}
-          />
+        <div className="workspace-scroll min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain pb-6">
+          <section
+            className="px-3 pt-3 xl:px-4"
+            aria-labelledby="source-control-current-snapshot"
+          >
+            <h3
+              id="source-control-current-snapshot"
+              className={sectionHeadingClass}
+            >
+              Current Snapshot
+            </h3>
+            {snapshotFile ? (
+              <MilestoneButton
+                file={snapshotFile}
+                heading={currentSnapshot.name}
+                isActive={snapshotActive}
+                showConnector={false}
+                onOpen={() => {
+                  openFile(currentSnapshot.relatedFileId)
+                }}
+              >
+                <span
+                  className={[
+                    milestoneTitleClass,
+                    snapshotActive ? "font-medium" : "",
+                  ].join(" ")}
+                >
+                  {currentSnapshot.name}
+                </span>
+                <span className={supportingClass}>{currentSnapshot.role}</span>
+                <span className={`mt-1 ${metaClass}`}>{currentSnapshot.stack}</span>
+                <span className={metaClass}>{currentSnapshot.location}</span>
+              </MilestoneButton>
+            ) : null}
+          </section>
           <HistorySection heading="Career" entries={careerMilestones} />
           <HistorySection heading="Education" entries={educationMilestones} />
           <HistorySection heading="Project Snapshots" entries={projectSnapshots} />
-          <p className="mt-4 px-3 text-[11px] leading-4 text-fg-muted">
-            Open any snapshot to inspect the related portfolio file.
-          </p>
         </div>
       </div>
     </SidebarPanel>
@@ -47,84 +86,11 @@ export function SourceControlPanel() {
 
 function PortfolioHistoryNotice() {
   return (
-    <div className="shrink-0 border-b border-subtle px-3 pb-3">
-      <h2 className="text-[11px] font-medium tracking-[0.14em] text-fg-muted uppercase">
+    <div className="shrink-0 border-b border-subtle px-3 py-2 xl:px-4">
+      <h2 className="text-[11px] font-medium tracking-[0.14em] text-fg-secondary uppercase">
         Portfolio History
       </h2>
-      <p className="mt-1.5 flex gap-1.5 text-[11px] leading-4 text-fg-muted">
-        <Info
-          size={12}
-          strokeWidth={1.75}
-          className="mt-0.5 shrink-0"
-          aria-hidden="true"
-        />
-        <span>
-          Git inspired portfolio milestones. These entries are not repository
-          commits.
-        </span>
-      </p>
     </div>
-  )
-}
-
-function CurrentSnapshot({
-  isActive,
-  onOpen,
-}: {
-  isActive: boolean
-  onOpen: () => void
-}) {
-  const file = findFileById(currentSnapshot.relatedFileId)
-
-  return (
-    <section className="px-3 pt-3" aria-labelledby="source-control-current-snapshot">
-      <h3
-        id="source-control-current-snapshot"
-        className="text-[11px] font-medium tracking-[0.14em] text-fg-muted uppercase"
-      >
-        Current Snapshot
-      </h3>
-      <button
-        type="button"
-        onClick={onOpen}
-        aria-current={isActive ? "page" : undefined}
-        aria-label={`Open ${file?.name ?? "experience.ts"} for ${currentSnapshot.role} at ${currentSnapshot.name}`}
-        className={[
-          "group mt-2 w-full rounded-sm px-1.5 py-3 text-left ui-transition hover:bg-hover md:py-2",
-          isActive ? "bg-hover" : "",
-        ].join(" ")}
-      >
-        <span className="flex min-w-0 items-start gap-2">
-          <span
-            aria-hidden="true"
-            className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
-          />
-          <span className="min-w-0 flex-1">
-            <span className="block font-mono text-[10px] tracking-[0.12em] text-fg-muted uppercase">
-              Current
-            </span>
-            <span
-              className={[
-                "mt-0.5 block text-[13px] leading-5 break-words",
-                isActive ? "text-fg" : "text-fg-secondary group-hover:text-fg ui-transition",
-              ].join(" ")}
-            >
-              {currentSnapshot.name}
-            </span>
-            <span className="mt-0.5 block text-[12px] leading-4 break-words text-fg-secondary">
-              {currentSnapshot.role}
-            </span>
-            <span className="mt-1 block text-[11px] leading-4 text-fg-muted">
-              {currentSnapshot.direction}
-            </span>
-            <span className="block text-[11px] leading-4 text-fg-muted">
-              {currentSnapshot.location}
-            </span>
-            {file ? <FilePathRow file={file} /> : null}
-          </span>
-        </span>
-      </button>
-    </section>
   )
 }
 
@@ -138,14 +104,11 @@ function HistorySection({
   const headingId = `source-control-${heading.toLowerCase().replace(/\s+/g, "-")}`
 
   return (
-    <section className="px-3 pt-4" aria-labelledby={headingId}>
-      <h3
-        id={headingId}
-        className="text-[11px] font-medium tracking-[0.14em] text-fg-muted uppercase"
-      >
+    <section className="px-3 pt-3 xl:px-4" aria-labelledby={headingId}>
+      <h3 id={headingId} className={sectionHeadingClass}>
         {heading}
       </h3>
-      <ul className="mt-1">
+      <ul>
         {entries.map((entry, index) => (
           <HistoryEntry
             key={entry.id}
@@ -169,106 +132,111 @@ function HistoryEntry({
   const file = findFileById(entry.relatedFileId)
   const isActive = activeFileId === entry.relatedFileId
 
+  if (!file) {
+    return null
+  }
+
   return (
-    <li className="relative flex gap-2">
-      <span
-        aria-hidden="true"
-        className="flex w-3 shrink-0 flex-col items-center"
-      >
-        <span className="mt-3 h-1.5 w-1.5 rounded-full bg-accent" />
-        {isLast ? null : (
-          <span className="mt-1 w-px flex-1 bg-subtle" />
-        )}
-      </span>
-      <button
-        type="button"
-        onClick={() => {
+    <li>
+      <MilestoneButton
+        file={file}
+        heading={entry.title}
+        isActive={isActive}
+        showConnector={!isLast}
+        onOpen={() => {
           openFile(entry.relatedFileId)
         }}
-        aria-current={isActive ? "page" : undefined}
-        aria-label={`Open ${file?.name ?? "related file"} for ${entry.title}`}
-        className={[
-          "group mb-1 min-w-0 flex-1 rounded-sm px-1.5 py-3 text-left ui-transition hover:bg-hover md:py-2",
-          isActive ? "bg-hover" : "",
-        ].join(" ")}
       >
-        {entry.isCurrent ? (
-          <span className="mb-1 inline-block font-mono text-[10px] tracking-[0.12em] text-accent uppercase">
-            Current
-          </span>
-        ) : null}
         <span
-          className={[
-            "block text-[13px] leading-5 break-words",
-            isActive ? "text-fg" : "text-fg-secondary ui-transition group-hover:text-fg",
-          ].join(" ")}
+          className={[milestoneTitleClass, isActive ? "font-medium" : ""].join(
+            " ",
+          )}
         >
           {entry.title}
         </span>
         {entry.subtitle ? (
-          <span className="mt-0.5 block text-[12px] leading-4 break-words text-fg-secondary">
-            {entry.subtitle}
-          </span>
-        ) : null}
-        {entry.focus ? (
-          <span className="mt-0.5 block text-[11px] leading-4 text-fg-muted">
-            {entry.focus}
-          </span>
+          <span className={supportingClass}>{entry.subtitle}</span>
         ) : null}
         {entry.period ? (
-          <span className="mt-1 block font-mono text-[11px] leading-4 text-fg-muted">
-            {entry.period}
-          </span>
+          <span className={`mt-1 font-mono ${metaClass}`}>{entry.period}</span>
         ) : null}
-        {entry.location ? (
-          <span className="block text-[11px] leading-4 text-fg-muted">
-            {entry.location}
-          </span>
+        {entry.location ? <span className={metaClass}>{entry.location}</span> : null}
+        {entry.proof ? (
+          <span className={`mt-1 ${metaClass}`}>{entry.proof}</span>
         ) : null}
-        {entry.kind === "project" ? (
-          <span className="mt-1.5 block text-[11px] leading-4 break-words text-fg-muted">
-            {entry.summary}
-          </span>
-        ) : null}
-        {entry.highlights ? (
-          <span className="mt-1.5 block text-[11px] leading-4 text-fg-secondary">
-            {entry.highlights.map((highlight) => (
-              <span key={highlight} className="block">
-                {highlight}
-              </span>
-            ))}
-          </span>
-        ) : null}
-        {entry.technologies ? (
-          <span className="mt-1 block text-[11px] leading-4 break-words text-fg-muted">
+        {entry.technologies && entry.technologies.length > 0 ? (
+          <span className={`${entry.proof ? "mt-0.5" : "mt-1"} ${metaClass}`}>
             {entry.technologies.join(" · ")}
           </span>
         ) : null}
-        {entry.metric ? (
-          <span className="mt-1 block text-[11px] leading-4 text-fg-secondary">
-            <span className="sr-only">{accessibleMetricValue(entry.metric)}</span>
-            <span aria-hidden="true">{entry.metric}</span>
-          </span>
-        ) : null}
-        {file ? <FilePathRow file={file} /> : null}
-      </button>
+      </MilestoneButton>
     </li>
   )
 }
 
-function FilePathRow({
+function MilestoneButton({
+  children,
   file,
+  heading,
+  isActive,
+  onOpen,
+  showConnector,
 }: {
-  file: NonNullable<ReturnType<typeof findFileById>>
+  children: ReactNode
+  file: PortfolioFile
+  heading: string
+  isActive: boolean
+  onOpen: () => void
+  showConnector: boolean
 }) {
   const pathLabel = openedFileLabel(file)
 
   return (
-    <span className="mt-2 flex min-w-0 items-center gap-1 text-fg-muted ui-transition group-hover:text-fg-secondary">
-      <FileIcon extension={file.extension} size={12} className="shrink-0" />
-      <span className="min-w-0 truncate font-mono text-[11px]" title={pathLabel}>
-        {pathLabel}
+    <button
+      type="button"
+      data-source-control-milestone=""
+      onClick={onOpen}
+      aria-current={isActive ? "page" : undefined}
+      aria-label={`Open ${heading}, ${pathLabel}`}
+      className={[
+        "group relative mt-0.5 flex min-h-11 w-full cursor-pointer gap-2 py-2 pr-1.5 pl-1 text-left hover:bg-hover focus-visible:bg-hover md:min-h-0 md:py-1.5",
+        isActive ? "bg-hover" : "",
+      ].join(" ")}
+    >
+      <span
+        aria-hidden="true"
+        className={[
+          "pointer-events-none absolute inset-y-0 left-0 w-0.5 bg-accent",
+          isActive ? "opacity-100" : "opacity-0 group-focus-visible:opacity-100",
+        ].join(" ")}
+      />
+      <span
+        aria-hidden="true"
+        className="flex w-2.5 shrink-0 flex-col items-center self-stretch pt-[7px] md:w-3"
+      >
+        <span className="size-1.5 shrink-0 rounded-full bg-accent" />
+        {showConnector ? <span className="w-px flex-1 bg-subtle" /> : null}
       </span>
-    </span>
+      <span className="min-w-0 flex-1">
+        {children}
+        <span
+          className={[
+            "mt-1.5 flex min-w-0 items-start gap-1.5",
+            isActive
+              ? "text-fg"
+              : "text-fg-secondary group-hover:text-fg group-focus-visible:text-fg",
+          ].join(" ")}
+        >
+          <FileIcon
+            extension={file.extension}
+            size={12}
+            className="mt-px shrink-0"
+          />
+          <span className="min-w-0 break-words font-mono text-[11px] leading-4">
+            {pathLabel}
+          </span>
+        </span>
+      </span>
+    </button>
   )
 }

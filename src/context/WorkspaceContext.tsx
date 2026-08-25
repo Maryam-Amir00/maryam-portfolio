@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer, type ReactNode } from "react"
-import { MOBILE_MEDIA_QUERY, OVERLAY_MEDIA_QUERY } from "../config/breakpoints"
+import { OVERLAY_MEDIA_QUERY } from "../config/breakpoints"
 import { findFileById } from "../data/portfolioFiles"
 import { siteConfig } from "../config/site"
 import { useMediaQuery } from "../hooks/useMediaQuery"
@@ -20,7 +20,7 @@ function createInitialWorkspaceState(
     ...baseState,
     activeSidebarView:
       typeof window !== "undefined" &&
-      window.matchMedia(MOBILE_MEDIA_QUERY).matches
+      window.matchMedia(OVERLAY_MEDIA_QUERY).matches
         ? null
         : baseState.activeSidebarView,
   }
@@ -43,7 +43,6 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     initialWorkspaceState,
     createInitialWorkspaceState,
   )
-  const isMobile = useMediaQuery(MOBILE_MEDIA_QUERY)
   const isOverlay = useMediaQuery(OVERLAY_MEDIA_QUERY)
 
   const activeFile = state.activeFileId
@@ -62,19 +61,19 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   }, [activeFile])
 
   useEffect(() => {
-    if (!isMobile) {
+    if (!isOverlay) {
       return
     }
 
     if (state.activeSidebarView !== null && state.terminalVisible) {
       dispatch({ type: "SET_TERMINAL_VISIBLE", visible: false })
     }
-  }, [isMobile, state.activeSidebarView, state.terminalVisible])
+  }, [isOverlay, state.activeSidebarView, state.terminalVisible])
 
   const openFile = useCallback(
     (fileId: string) => {
       dispatch({ type: "OPEN_FILE", fileId })
-      if (isMobile) {
+      if (isOverlay) {
         dispatch({ type: "SET_SIDEBAR_VIEW", view: null })
         clearOverlayTrigger()
         requestAnimationFrame(() => {
@@ -82,7 +81,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
         })
       }
     },
-    [isMobile],
+    [isOverlay],
   )
 
   const activateFile = useCallback((fileId: string) => {
@@ -101,112 +100,85 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     if (isOverlay && state.activeSidebarView !== "explorer") {
       captureOverlayTrigger()
     }
-    if (isMobile && state.activeSidebarView !== "explorer") {
-      dispatch({ type: "SET_TERMINAL_VISIBLE", visible: false })
-    }
     dispatch({ type: "TOGGLE_EXPLORER" })
-  }, [isMobile, isOverlay, state.activeSidebarView])
+  }, [isOverlay, state.activeSidebarView])
 
   const setExplorerVisible = useCallback(
     (visible: boolean) => {
       if (isOverlay && visible) {
         captureOverlayTrigger()
       }
-      if (isMobile && visible) {
-        dispatch({ type: "SET_TERMINAL_VISIBLE", visible: false })
-      }
       dispatch({ type: "SET_EXPLORER_VISIBLE", visible })
     },
-    [isMobile, isOverlay],
+    [isOverlay],
   )
 
   const toggleSearch = useCallback(() => {
     if (isOverlay && state.activeSidebarView !== "search") {
       captureOverlayTrigger()
     }
-    if (isMobile && state.activeSidebarView !== "search") {
-      dispatch({ type: "SET_TERMINAL_VISIBLE", visible: false })
-    }
     dispatch({ type: "TOGGLE_SEARCH" })
-  }, [isMobile, isOverlay, state.activeSidebarView])
+  }, [isOverlay, state.activeSidebarView])
 
   const showExplorer = useCallback(() => {
     if (isOverlay) {
       captureOverlayTrigger()
     }
-    if (isMobile) {
-      dispatch({ type: "SET_TERMINAL_VISIBLE", visible: false })
-    }
     dispatch({ type: "SET_SIDEBAR_VIEW", view: "explorer" })
-  }, [isMobile, isOverlay])
+  }, [isOverlay])
 
   const showSearch = useCallback(() => {
     if (isOverlay) {
       captureOverlayTrigger()
     }
-    if (isMobile) {
-      dispatch({ type: "SET_TERMINAL_VISIBLE", visible: false })
-    }
     dispatch({ type: "SET_SIDEBAR_VIEW", view: "search" })
-  }, [isMobile, isOverlay])
+  }, [isOverlay])
 
   const toggleSourceControl = useCallback(() => {
     if (isOverlay && state.activeSidebarView !== "source-control") {
       captureOverlayTrigger()
     }
-    if (isMobile && state.activeSidebarView !== "source-control") {
-      dispatch({ type: "SET_TERMINAL_VISIBLE", visible: false })
-    }
     dispatch({ type: "TOGGLE_SOURCE_CONTROL" })
-  }, [isMobile, isOverlay, state.activeSidebarView])
+  }, [isOverlay, state.activeSidebarView])
 
   const showSourceControl = useCallback(() => {
     if (isOverlay) {
       captureOverlayTrigger()
     }
-    if (isMobile) {
-      dispatch({ type: "SET_TERMINAL_VISIBLE", visible: false })
-    }
     dispatch({ type: "SET_SIDEBAR_VIEW", view: "source-control" })
-  }, [isMobile, isOverlay])
+  }, [isOverlay])
 
   const toggleExtensions = useCallback(() => {
     if (isOverlay && state.activeSidebarView !== "extensions") {
       captureOverlayTrigger()
     }
-    if (isMobile && state.activeSidebarView !== "extensions") {
-      dispatch({ type: "SET_TERMINAL_VISIBLE", visible: false })
-    }
     dispatch({ type: "TOGGLE_EXTENSIONS" })
-  }, [isMobile, isOverlay, state.activeSidebarView])
+  }, [isOverlay, state.activeSidebarView])
 
   const showExtensions = useCallback(() => {
     if (isOverlay) {
       captureOverlayTrigger()
     }
-    if (isMobile) {
-      dispatch({ type: "SET_TERMINAL_VISIBLE", visible: false })
-    }
     dispatch({ type: "SET_SIDEBAR_VIEW", view: "extensions" })
-  }, [isMobile, isOverlay])
+  }, [isOverlay])
 
   const closeSidebar = useCallback(() => {
     dispatch({ type: "SET_SIDEBAR_VIEW", view: null })
   }, [])
 
   const toggleTerminal = useCallback(() => {
-    if (isMobile && !state.terminalVisible) {
+    if (isOverlay && !state.terminalVisible) {
       dispatch({ type: "SET_SIDEBAR_VIEW", view: null })
     }
     dispatch({ type: "TOGGLE_TERMINAL" })
-  }, [isMobile, state.terminalVisible])
+  }, [isOverlay, state.terminalVisible])
 
   const openTerminal = useCallback(() => {
-    if (isMobile) {
+    if (isOverlay) {
       dispatch({ type: "SET_SIDEBAR_VIEW", view: null })
     }
     dispatch({ type: "SET_TERMINAL_VISIBLE", visible: true })
-  }, [isMobile])
+  }, [isOverlay])
 
   const closeTerminal = useCallback(() => {
     dispatch({ type: "SET_TERMINAL_VISIBLE", visible: false })

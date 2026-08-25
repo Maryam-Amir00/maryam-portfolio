@@ -15,14 +15,14 @@ export function SkillsView() {
   const deployment = skillGroups.find((group) => group.key === "deployment")
 
   return (
-    <div className="flex min-h-full min-w-0 flex-col overflow-x-hidden">
+    <div className="flex min-h-full min-w-0 flex-col overflow-x-clip">
       <EditorBreadcrumbs
         items={[
           { label: "src" },
           { label: "skills.json", current: true },
         ]}
       />
-      <article className="mr-auto min-w-0 w-full max-w-[68rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
+      <article className="@container mr-auto min-w-0 w-full max-w-[68rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
         <JsonIntro />
         <Header />
         <PrimaryStack />
@@ -50,7 +50,7 @@ function JsonIntro() {
   return (
     <pre
       aria-hidden="true"
-      className="max-w-[42rem] overflow-x-auto font-mono text-[12px] leading-6 text-fg whitespace-pre-wrap md:text-[13px]"
+      className="code-scroll max-w-[42rem] overflow-x-auto font-mono text-[12px] leading-6 text-fg whitespace-pre md:text-[13px]"
     >
       <code>
         <Punct>{"{\n"}</Punct>
@@ -110,7 +110,7 @@ function PrimaryStack() {
         {primaryStack.map((skill, index) => (
           <li
             key={skill.id}
-            className="grid gap-1 py-3.5 min-[640px]:grid-cols-[2.25rem_minmax(12rem,22rem)_minmax(0,1fr)] min-[640px]:items-baseline min-[640px]:gap-6"
+            className="grid gap-1 py-3.5 @min-[40rem]:grid-cols-[2.25rem_minmax(12rem,22rem)_minmax(0,1fr)] @min-[40rem]:items-baseline @min-[40rem]:gap-6"
           >
             <span
               aria-hidden="true"
@@ -164,7 +164,7 @@ function SkillCategory({
       <ul
         className={
           layout === "wide"
-            ? "mt-2 grid min-w-0 gap-x-10 gap-y-1 min-[720px]:grid-cols-3"
+            ? "mt-2 grid min-w-0 gap-x-10 gap-y-1 @min-[42rem]:grid-cols-3"
             : "mt-2"
         }
       >

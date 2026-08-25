@@ -24,7 +24,7 @@ const links = getSafeProjectLinks(project)
 
 export function MovixxxView() {
   return (
-    <div className="flex min-h-full min-w-0 flex-col overflow-x-hidden">
+    <div className="flex min-h-full min-w-0 flex-col overflow-x-clip">
       <EditorBreadcrumbs
         items={[
           { label: "src" },
@@ -32,7 +32,7 @@ export function MovixxxView() {
           { label: project.fileName, current: true },
         ]}
       />
-      <article className="mr-auto min-w-0 w-full max-w-[64rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
+      <article className="@container mr-auto min-w-0 w-full max-w-[64rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
         <div className="border-b border-subtle pb-10 md:pb-12">
           <CodeIntro />
           <Header />
@@ -87,7 +87,7 @@ function CodeIntro() {
   return (
     <div
       aria-hidden="true"
-      className="max-w-[42rem] font-mono text-[12px] leading-6 text-fg md:text-[13px]"
+      className="code-scroll max-w-[42rem] overflow-x-auto font-mono text-[12px] leading-6 text-fg md:text-[13px]"
     >
       <p className="text-syntax-comment">{"// movixxx.jsx"}</p>
       <p className="mt-1">
@@ -161,11 +161,11 @@ function EventPipeline({
       <p className="sr-only">{description}</p>
       <ol
         aria-hidden="true"
-        className="flex min-w-0 flex-col min-[880px]:flex-row min-[880px]:items-stretch"
+        className="grid min-w-0 grid-cols-1 @min-[40rem]:grid-cols-2 @min-[64rem]:flex @min-[64rem]:flex-row @min-[64rem]:items-stretch"
       >
         {stages.map((stage, index) => (
           <Fragment key={stage.id}>
-            <li className="min-w-0 flex-1 border-l border-subtle py-2 pl-3 min-[880px]:border-t min-[880px]:border-l-0 min-[880px]:px-0 min-[880px]:pt-3 min-[880px]:pb-0">
+            <li className="min-w-0 border-l border-subtle py-2 pl-3 @min-[40rem]:border-t @min-[40rem]:border-l-0 @min-[40rem]:px-0 @min-[40rem]:pt-3 @min-[40rem]:pb-2 @min-[64rem]:flex-1 @min-[64rem]:pb-0">
               <p className="font-mono text-[11px] text-fg-muted">{stage.index}</p>
               <p className="mt-1.5 font-mono text-[12px] font-medium tracking-[0.12em] text-fg uppercase">
                 {stage.label}
@@ -177,16 +177,16 @@ function EventPipeline({
               ) : null}
             </li>
             {index < stages.length - 1 ? (
-              <li className="flex shrink-0 items-center px-0 py-2 pl-3 min-[880px]:px-2.5 min-[880px]:py-0 min-[880px]:pl-0">
+              <li className="flex shrink-0 items-center px-0 py-2 pl-3 @min-[40rem]:hidden @min-[64rem]:flex @min-[64rem]:px-2.5 @min-[64rem]:py-0 @min-[64rem]:pl-0">
                 <ArrowDown
                   size={16}
                   strokeWidth={1.75}
-                  className="text-fg-muted min-[880px]:hidden"
+                  className="text-fg-muted @min-[64rem]:hidden"
                 />
                 <ArrowRight
                   size={16}
                   strokeWidth={1.75}
-                  className="hidden text-fg-muted min-[880px]:block"
+                  className="hidden text-fg-muted @min-[64rem]:block"
                 />
               </li>
             ) : null}
@@ -224,7 +224,7 @@ function SearchFlowSection() {
         {project.debounceExplanation}
       </p>
       <p className="sr-only">{project.debounceComparison.description}</p>
-      <div className="mt-8 grid gap-8 min-[800px]:grid-cols-2 min-[800px]:gap-x-12">
+      <div className="mt-8 grid gap-8 @min-[48rem]:grid-cols-2 @min-[48rem]:gap-x-12">
         <ComparisonColumn column={project.debounceComparison.without} showRequest />
         <ComparisonColumn column={project.debounceComparison.with} />
       </div>
@@ -281,7 +281,7 @@ function WatchlistSection() {
       <p className="sr-only">{project.watchlist.flowDescription}</p>
       <div
         aria-hidden="true"
-        className="mt-6 grid gap-8 min-[800px]:grid-cols-2 min-[800px]:gap-x-12"
+        className="mt-6 grid gap-8 @min-[48rem]:grid-cols-2 @min-[48rem]:gap-x-12"
       >
         <FlowList
           heading="this session"
@@ -292,7 +292,7 @@ function WatchlistSection() {
           stages={project.watchlist.restoreFlow}
         />
       </div>
-      <dl className="mt-8 grid gap-5 min-[800px]:grid-cols-2 min-[800px]:gap-x-12">
+      <dl className="mt-8 grid gap-5 @min-[48rem]:grid-cols-2 @min-[48rem]:gap-x-12">
         {project.watchlist.roles.map((item) => (
           <div key={item.id} className="min-w-0 border-t border-subtle pt-3">
             <dt className="font-mono text-[13px] text-syntax-property">
@@ -351,7 +351,7 @@ function LoadingSection() {
       </p>
       <div
         aria-hidden="true"
-        className="mt-5 max-w-[22rem] border border-subtle px-4 py-3"
+        className="mt-5 w-full min-w-0 max-w-[22rem] border border-subtle px-4 py-3"
       >
         <p className="font-mono text-[12px] text-syntax-comment">
           {project.loading.status}
@@ -400,7 +400,7 @@ function HighlightsSection() {
         {project.features.map((feature) => (
           <li
             key={feature.id}
-            className="grid gap-1 py-3 min-[640px]:grid-cols-[2.25rem_minmax(0,14rem)_minmax(0,1fr)] min-[640px]:items-baseline min-[640px]:gap-4"
+            className="grid gap-1 py-3 @min-[40rem]:grid-cols-[2.25rem_minmax(0,14rem)_minmax(0,1fr)] @min-[40rem]:items-baseline @min-[40rem]:gap-4"
           >
             <span className="font-mono text-[12px] text-fg-muted">
               {feature.index}
@@ -430,7 +430,7 @@ function InlineFlow({
       <p className="sr-only">{description}</p>
       <ol
         aria-hidden="true"
-        className="flex min-w-0 flex-col gap-1 min-[640px]:flex-row min-[640px]:flex-wrap min-[640px]:items-center min-[640px]:gap-x-2 min-[640px]:gap-y-2"
+        className="flex min-w-0 flex-col gap-1 @min-[40rem]:flex-row @min-[40rem]:flex-wrap @min-[40rem]:items-center @min-[40rem]:gap-x-2 @min-[40rem]:gap-y-2"
       >
         {stages.map((stage, index) => (
           <Fragment key={stage.id}>
@@ -438,16 +438,16 @@ function InlineFlow({
               {stage.label}
             </li>
             {index < stages.length - 1 ? (
-              <li className="flex text-fg-muted min-[640px]:items-center">
+              <li className="flex text-fg-muted @min-[40rem]:items-center">
                 <ArrowDown
                   size={12}
                   strokeWidth={1.75}
-                  className="min-[640px]:hidden"
+                  className="@min-[40rem]:hidden"
                 />
                 <ArrowRight
                   size={12}
                   strokeWidth={1.75}
-                  className="hidden min-[640px]:block"
+                  className="hidden @min-[40rem]:block"
                 />
               </li>
             ) : null}
@@ -467,8 +467,8 @@ function DataConcernsSection() {
       <p className="max-w-[42rem] text-[15px] leading-[1.7] text-fg-secondary">
         {project.dataNote}
       </p>
-      <div className="mt-6 grid gap-8 min-[880px]:grid-cols-2 min-[880px]:gap-0">
-        <div className="min-w-0 min-[880px]:pr-10">
+      <div className="mt-6 grid gap-8 @min-[52rem]:grid-cols-2 @min-[52rem]:gap-0">
+        <div className="min-w-0 @min-[52rem]:pr-10">
           <h3 className="font-mono text-[12px] font-medium tracking-[0.12em] text-fg uppercase">
             Remote / API
           </h3>
@@ -477,7 +477,7 @@ function DataConcernsSection() {
             description={project.searchDataFlowDescription}
           />
         </div>
-        <div className="min-w-0 border-t border-subtle pt-6 min-[880px]:border-t-0 min-[880px]:border-l min-[880px]:pt-0 min-[880px]:pl-10">
+        <div className="min-w-0 border-t border-subtle pt-6 @min-[52rem]:border-t-0 @min-[52rem]:border-l @min-[52rem]:pt-0 @min-[52rem]:pl-10">
           <h3 className="font-mono text-[12px] font-medium tracking-[0.12em] text-fg uppercase">
             Local / Persistent
           </h3>
@@ -512,7 +512,7 @@ function StackSection() {
       <ProjectSectionHeading comment="stack">
         Project Stack
       </ProjectSectionHeading>
-      <dl className="grid gap-x-10 gap-y-4 min-[720px]:grid-cols-2">
+      <dl className="grid gap-x-10 gap-y-4 @min-[42rem]:grid-cols-2">
         {project.stackGroups.map((item) => (
           <div key={item.id} className="min-w-0 border-t border-subtle pt-3">
             <dt className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">
@@ -535,7 +535,7 @@ function DemonstratesSection() {
       <p className="max-w-[42rem] text-[15px] leading-[1.7] text-fg-secondary">
         {project.demonstratesIntro}
       </p>
-      <dl className="mt-6 grid gap-x-10 gap-y-4 min-[720px]:grid-cols-2 min-[1080px]:grid-cols-3">
+      <dl className="mt-6 grid gap-x-10 gap-y-4 @min-[42rem]:grid-cols-2 @min-[56.25rem]:grid-cols-3">
         {project.demonstrates.map((item) => (
           <div key={item.id} className="min-w-0 border-t border-subtle pt-3">
             <dt className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">

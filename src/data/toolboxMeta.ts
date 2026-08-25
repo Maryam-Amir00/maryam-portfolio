@@ -214,7 +214,7 @@ function entryFor(
     isCore,
     keywords: meta.keywords,
     categoryTerms,
-    evidenceFileIds: meta.evidenceFileIds.slice(0, 3),
+    evidenceFileIds: meta.evidenceFileIds,
   }
 }
 

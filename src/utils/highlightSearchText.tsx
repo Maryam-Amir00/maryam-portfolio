@@ -68,7 +68,7 @@ export function highlightSearchText(
     parts.push(
       <mark
         key={`${range.start}-${range.end}`}
-        className="rounded-[2px] bg-accent/20 text-fg"
+        className="bg-transparent font-medium text-accent/90"
       >
         {text.slice(range.start, range.end)}
       </mark>,

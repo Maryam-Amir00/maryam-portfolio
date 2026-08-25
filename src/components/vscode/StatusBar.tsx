@@ -12,7 +12,7 @@ export function StatusBar() {
   return (
     <footer
       aria-label="Workspace status"
-      className="flex h-5 shrink-0 items-center justify-between bg-status px-1 text-[11px] text-status-fg select-none md:h-6"
+      className="flex h-5 min-w-0 shrink-0 items-center justify-between overflow-hidden bg-status px-1 text-[11px] text-status-fg select-none md:h-6"
     >
       <div className="flex min-w-0 items-center">
         <span className="hidden items-center gap-1 px-1.5 py-0.5 md:flex">
@@ -39,10 +39,10 @@ export function StatusBar() {
       {activeFile ? (
         <div className="flex min-w-0 items-center">
           {activeFile.extension !== "pdf" ? (
-            <span className="hidden px-1.5 py-0.5 lg:inline">Ln 1, Col 1</span>
+            <span className="hidden px-1.5 py-0.5 xl:inline">Ln 1, Col 1</span>
           ) : null}
           {showsSpacesIndent(activeFile) ? (
-            <span className="hidden px-1.5 py-0.5 lg:inline">Spaces: 2</span>
+            <span className="hidden px-1.5 py-0.5 xl:inline">Spaces: 2</span>
           ) : null}
           {showsEncoding(activeFile) ? (
             <span className="px-1.5 py-0.5">UTF-8</span>

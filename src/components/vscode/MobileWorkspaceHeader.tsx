@@ -11,7 +11,10 @@ export function MobileWorkspaceHeader() {
   } = useWorkspace()
 
   return (
-    <div className="shrink-0 bg-topbar pt-[env(safe-area-inset-top)] md:hidden">
+    <div
+      className="shrink-0 bg-topbar pt-[env(safe-area-inset-top)] md:hidden"
+      data-workspace-mobile-chrome=""
+    >
       <header className="flex h-11 items-center gap-2 border-b border-subtle pr-1 pl-2">
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <Code2

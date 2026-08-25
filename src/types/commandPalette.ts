@@ -13,6 +13,9 @@ export type CommandPaletteIconName =
   | "terminal"
   | "explorer"
   | "copy"
+  | "phone"
+  | "send"
+  | "external"
   | "search"
   | "source-control"
   | "extensions"
@@ -24,7 +27,8 @@ export type CommandPaletteTarget =
   | { type: "show-search" }
   | { type: "show-source-control" }
   | { type: "show-extensions" }
-  | { type: "copy-email" }
+  | { type: "copy-text"; value: string; status: string }
+  | { type: "open-url"; url: string }
 
 export type CommandPaletteAction = {
   id: string
@@ -46,6 +50,7 @@ export type CommandPaletteGroup = {
 export type PaletteExecuteResult = {
   restoreFocus: boolean
   status?: string
+  keepOpen?: boolean
   focusSearch?: boolean
   focusToolbox?: boolean
 }

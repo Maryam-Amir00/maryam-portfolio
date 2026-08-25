@@ -18,7 +18,7 @@ const links = getSafeProjectLinks(project)
 
 export function StudySyncView() {
   return (
-    <div className="flex min-h-full min-w-0 flex-col overflow-x-hidden">
+    <div className="flex min-h-full min-w-0 flex-col overflow-x-clip">
       <EditorBreadcrumbs
         items={[
           { label: "src" },
@@ -75,7 +75,7 @@ function CodeIntro() {
   return (
     <div
       aria-hidden="true"
-      className="max-w-[46rem] font-mono text-[12px] leading-6 text-fg md:text-[13px]"
+      className="code-scroll max-w-[46rem] overflow-x-auto font-mono text-[12px] leading-6 text-fg md:text-[13px]"
     >
       <p>
         <span className="text-syntax-keyword">const</span>
@@ -138,7 +138,7 @@ function CapabilitiesSection() {
         {project.features.map((feature) => (
           <li
             key={feature.id}
-            className="grid gap-1 py-4 min-[640px]:grid-cols-[2.25rem_minmax(0,16rem)_minmax(0,1fr)] min-[640px]:items-baseline min-[640px]:gap-4"
+            className="grid gap-1 py-4 @min-[40rem]:grid-cols-[2.25rem_minmax(0,16rem)_minmax(0,1fr)] @min-[40rem]:items-baseline @min-[40rem]:gap-4"
           >
             <span className="font-mono text-[12px] text-fg-muted">
               {feature.index}
@@ -200,10 +200,10 @@ function AuthFlowSection() {
       <p className="mb-5 max-w-[46rem] text-[14px] leading-6 text-fg-secondary">
         {description}
       </p>
-      <ol className="flex min-w-0 flex-col gap-2 min-[720px]:flex-row min-[720px]:flex-wrap min-[720px]:items-center min-[720px]:gap-x-3 min-[720px]:gap-y-3">
+      <ol className="flex min-w-0 flex-col gap-2 @min-[42rem]:flex-row @min-[42rem]:flex-wrap @min-[42rem]:items-center @min-[42rem]:gap-x-3 @min-[42rem]:gap-y-3">
         {stages.map((stage, index) => (
           <Fragment key={stage.id}>
-            <li className="min-w-0 font-mono text-[13px] text-fg-secondary">
+            <li className="min-w-0 break-words font-mono text-[13px] text-fg-secondary">
               <span className="text-fg-muted">{stage.index}</span>
               {"  "}
               {stage.label}
@@ -211,17 +211,17 @@ function AuthFlowSection() {
             {index < stages.length - 1 ? (
               <li
                 aria-hidden="true"
-                className="flex justify-center text-fg-muted min-[720px]:items-center"
+                className="flex justify-center text-fg-muted @min-[42rem]:items-center"
               >
                 <ArrowDown
                   size={14}
                   strokeWidth={1.75}
-                  className="min-[720px]:hidden"
+                  className="@min-[42rem]:hidden"
                 />
                 <ArrowRight
                   size={14}
                   strokeWidth={1.75}
-                  className="hidden min-[720px]:block"
+                  className="hidden @min-[42rem]:block"
                 />
               </li>
             ) : null}
@@ -242,7 +242,7 @@ function ChallengesSection() {
         {project.challenges.map((item) => (
           <li key={item.id} className="py-5">
             <h3 className="text-[1.02rem] font-medium text-fg">{item.title}</h3>
-            <dl className="mt-3 grid gap-5 min-[800px]:grid-cols-2 min-[800px]:gap-8">
+            <dl className="mt-3 grid gap-5 @min-[48rem]:grid-cols-2 @min-[48rem]:gap-8">
               <div className="min-w-0">
                 <dt className="font-mono text-[11px] tracking-[0.08em] text-syntax-property">
                   challenge
@@ -278,7 +278,7 @@ function AnalyticsSection() {
       </p>
       <pre
         aria-hidden="true"
-        className="mt-5 max-w-[32rem] overflow-x-auto font-mono text-[12px] leading-6 text-fg md:text-[13px]"
+        className="code-scroll mt-5 max-w-[32rem] overflow-x-auto font-mono text-[12px] leading-6 text-fg md:text-[13px]"
       >
         <code>
           <span className="text-syntax-property">analytics</span>
@@ -308,7 +308,7 @@ function DemonstratesSection() {
       <p className="max-w-[46rem] text-[15px] leading-[1.7] text-fg-secondary">
         {project.demonstratesIntro}
       </p>
-      <dl className="mt-6 grid gap-x-10 gap-y-4 min-[720px]:grid-cols-2 min-[1080px]:grid-cols-3">
+      <dl className="mt-6 grid gap-x-10 gap-y-4 @min-[42rem]:grid-cols-2 @min-[56.25rem]:grid-cols-3">
         {project.demonstrates.map((item) => (
           <div key={item.id} className="min-w-0 border-t border-subtle pt-3">
             <dt className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">

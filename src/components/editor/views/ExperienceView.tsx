@@ -13,14 +13,14 @@ const period = formatExperiencePeriod(experience)
 
 export function ExperienceView() {
   return (
-    <div className="flex min-h-full min-w-0 flex-col overflow-x-hidden">
+    <div className="flex min-h-full min-w-0 flex-col overflow-x-clip">
       <EditorBreadcrumbs
         items={[
           { label: "src" },
           { label: "experience.ts", current: true },
         ]}
       />
-      <article className="mr-auto min-w-0 w-full max-w-[64rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
+      <article className="@container mr-auto min-w-0 w-full max-w-[64rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
         <RoleCodeIntro entry={experience} />
         <RoleHeader />
         <ImpactSummary />
@@ -36,7 +36,7 @@ function RoleCodeIntro({ entry }: { entry: ExperienceEntry }) {
   return (
     <pre
       aria-hidden="true"
-      className="max-w-[42rem] overflow-x-auto font-mono text-[12px] leading-6 text-fg whitespace-pre-wrap md:text-[13px]"
+      className="code-scroll max-w-[42rem] overflow-x-auto font-mono text-[12px] leading-6 text-fg whitespace-pre md:text-[13px]"
     >
       <code>
         <span className="text-syntax-keyword">export const</span>
@@ -112,11 +112,11 @@ function RoleHeader() {
 function ImpactSummary() {
   return (
     <section aria-label="Impact summary" className="mt-8 border-y border-subtle">
-      <dl className="grid grid-cols-2 lg:grid-cols-4">
+      <dl className="grid grid-cols-1 min-[360px]:grid-cols-2 xl:grid-cols-4">
         {experience.metrics.map((metric) => (
           <div
             key={metric.id}
-            className="border-subtle px-3 py-4 sm:px-4 max-lg:border-b max-lg:odd:border-r max-lg:[&:nth-last-child(-n+2)]:border-b-0 lg:border-r lg:last:border-r-0"
+            className="border-subtle px-3 py-4 sm:px-4 max-[359px]:border-b max-[359px]:last:border-b-0 min-[360px]:max-xl:border-b min-[360px]:max-xl:odd:border-r min-[360px]:max-xl:[&:nth-last-child(-n+2)]:border-b-0 xl:border-r xl:last:border-r-0"
           >
             <dt className="sr-only">{metric.label}</dt>
             <dd>
@@ -202,7 +202,7 @@ function Workflow() {
         {experience.workflow.map((item) => (
           <div
             key={item.id}
-            className="grid gap-1 py-2.5 min-[640px]:grid-cols-[13.5rem_minmax(0,1fr)] min-[640px]:items-baseline min-[640px]:gap-4"
+            className="grid gap-1 py-2.5 @min-[40rem]:grid-cols-[13.5rem_minmax(0,1fr)] @min-[40rem]:items-baseline @min-[40rem]:gap-4"
           >
             <dt className="font-mono text-[13px] text-syntax-property">
               {item.key}

@@ -26,7 +26,7 @@ export function EditorTabs() {
   return (
     <div
       aria-label="Open editors"
-      className="workspace-tabs flex h-10 shrink-0 items-stretch overflow-x-auto overflow-y-hidden p-px whitespace-nowrap border-b border-subtle bg-tab md:h-9"
+      className="workspace-tabs flex h-10 min-w-0 shrink-0 items-stretch overflow-x-auto overflow-y-hidden p-px whitespace-nowrap border-b border-subtle bg-tab md:h-9"
     >
       {openFiles.map((file) => {
         const isActive = file.id === activeFileId
@@ -73,10 +73,19 @@ function EditorTab({
       return
     }
 
-    tabRef.current?.scrollIntoView({
-      block: "nearest",
-      inline: "nearest",
-    })
+    const tab = tabRef.current
+    const scroller = tab?.parentElement
+    if (!tab || !scroller) {
+      return
+    }
+
+    const tabRect = tab.getBoundingClientRect()
+    const scrollerRect = scroller.getBoundingClientRect()
+    if (tabRect.left < scrollerRect.left) {
+      scroller.scrollLeft += tabRect.left - scrollerRect.left
+    } else if (tabRect.right > scrollerRect.right) {
+      scroller.scrollLeft += tabRect.right - scrollerRect.right
+    }
   }, [isActive])
 
   return (

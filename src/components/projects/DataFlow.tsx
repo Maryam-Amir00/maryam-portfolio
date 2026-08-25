@@ -16,11 +16,11 @@ export function DataFlow({
       </p>
       <ol
         aria-hidden="true"
-        className="flex min-w-0 flex-col @min-[52rem]:flex-row @min-[52rem]:items-stretch"
+        className="grid min-w-0 grid-cols-1 @min-[40rem]:grid-cols-2 @min-[64rem]:flex @min-[64rem]:flex-row @min-[64rem]:items-stretch"
       >
         {stages.map((stage, index) => (
           <Fragment key={stage.id}>
-            <li className="min-w-0 flex-1 border border-subtle px-4 py-4">
+            <li className="min-w-0 border border-subtle px-4 py-4 @min-[64rem]:flex-1">
               <p className="font-mono text-[11px] text-fg-muted">{stage.index}</p>
               <p className="mt-2 font-mono text-[12px] font-medium tracking-[0.12em] text-fg uppercase">
                 {stage.label}
@@ -32,16 +32,16 @@ export function DataFlow({
               ) : null}
             </li>
             {index < stages.length - 1 ? (
-              <li className="flex shrink-0 items-center justify-center px-0 py-3 @min-[52rem]:px-2.5 @min-[52rem]:py-0">
+              <li className="flex shrink-0 items-center justify-center px-0 py-3 @min-[40rem]:hidden @min-[64rem]:flex @min-[64rem]:px-2.5 @min-[64rem]:py-0">
                 <ArrowDown
                   size={16}
                   strokeWidth={1.75}
-                  className="text-fg-muted @min-[52rem]:hidden"
+                  className="text-fg-muted @min-[64rem]:hidden"
                 />
                 <ArrowRight
                   size={16}
                   strokeWidth={1.75}
-                  className="hidden text-fg-muted @min-[52rem]:block"
+                  className="hidden text-fg-muted @min-[64rem]:block"
                 />
               </li>
             ) : null}
