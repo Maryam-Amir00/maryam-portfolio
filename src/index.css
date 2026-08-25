@@ -30,13 +30,14 @@
   --error: #e09090;
   --success: #7da87a;
   --motion-fast: 120ms;
-  --motion-base: 170ms;
-  --motion-overlay: 200ms;
+  --motion-base: 160ms;
+  --motion-overlay: 190ms;
   --ease-ui: cubic-bezier(0.2, 0.8, 0.2, 1);
   --z-sidebar-backdrop: 20;
   --z-sidebar: 30;
   --z-terminal: 40;
   --z-command-palette: 50;
+  --z-cursor: 80;
 }
 
 @theme inline {
@@ -74,6 +75,7 @@
   --z-sidebar: 30;
   --z-terminal: 40;
   --z-command-palette: 50;
+  --z-cursor: 80;
 }
 
 html,
@@ -331,8 +333,8 @@ textarea:-webkit-autofill {
 
 @keyframes palette-surface-in {
   from {
-    opacity: 0.92;
-    transform: translateY(-6px);
+    opacity: 0;
+    transform: translateY(-4px);
   }
   to {
     opacity: 1;
@@ -342,7 +344,7 @@ textarea:-webkit-autofill {
 
 @keyframes sidebar-overlay-in {
   from {
-    opacity: 0.92;
+    opacity: 0.98;
     transform: translateX(-8px);
   }
   to {
@@ -353,8 +355,8 @@ textarea:-webkit-autofill {
 
 @keyframes terminal-overlay-in {
   from {
-    opacity: 0.92;
-    transform: translateY(8px);
+    opacity: 0;
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
@@ -363,7 +365,7 @@ textarea:-webkit-autofill {
 }
 
 .palette-surface-in {
-  animation: palette-surface-in 180ms var(--ease-ui);
+  animation: palette-surface-in var(--motion-overlay) var(--ease-ui);
 }
 
 @media (max-width: 767px), ((max-height: 500px) and (max-width: 959px)) {
@@ -379,11 +381,11 @@ textarea:-webkit-autofill {
 
 @media (max-width: 1279px) {
   .sidebar-overlay-in {
-    animation: sidebar-overlay-in 140ms var(--ease-ui);
+    animation: sidebar-overlay-in var(--motion-overlay) var(--ease-ui);
   }
 
   .terminal-overlay-in {
-    animation: terminal-overlay-in 150ms var(--ease-ui);
+    animation: terminal-overlay-in var(--motion-base) var(--ease-ui);
   }
 }
 
@@ -391,11 +393,83 @@ textarea:-webkit-autofill {
   .sidebar-overlay-in,
   .terminal-overlay-in,
   .palette-surface-in,
-  .home-editor-caret {
+  .home-editor-caret,
+  .motion-nudge-x,
+  .motion-nudge-x-3 {
     animation: none !important;
+  }
+
+  .motion-nudge-x,
+  .motion-nudge-x-3 {
+    transition-duration: 0.01ms !important;
+    transform: none !important;
   }
 
   .home-editor-caret {
     opacity: 1;
+  }
+}
+
+.motion-nudge-x,
+.motion-nudge-x-3 {
+  transition-property: transform;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--ease-ui);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  @media (prefers-reduced-motion: no-preference) {
+    .group:is(:hover, :focus-visible) > .motion-nudge-x {
+      transform: translateX(2px);
+    }
+
+    .group\/project:is(:hover, :focus-visible) .motion-nudge-x-3 {
+      transform: translateX(3px);
+    }
+  }
+}
+
+.cursor-enhancement {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-cursor);
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.cursor-enhancement__ring {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid color-mix(in srgb, var(--accent) 58%, transparent);
+  border-radius: 50%;
+  opacity: 0.4;
+  transform: translate(-50%, -50%) scale(1);
+  transition-property: transform, opacity;
+  transition-duration: var(--motion-base);
+  transition-timing-function: var(--ease-ui);
+}
+
+.cursor-enhancement__ring[data-kind="interactive"] {
+  opacity: 0.52;
+  transform: translate(-50%, -50%) scale(1.4);
+}
+
+.cursor-enhancement__ring[data-kind="text"] {
+  opacity: 0.22;
+  transform: translate(-50%, -50%) scale(0.75);
+}
+
+.cursor-enhancement[data-visible="false"] .cursor-enhancement__ring {
+  opacity: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  @media (prefers-reduced-motion: no-preference) {
+    .cursor-enhancement {
+      display: block;
+    }
   }
 }

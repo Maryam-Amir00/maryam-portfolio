@@ -232,7 +232,7 @@ function ToolboxTechnology({
   const hiddenCount = evidenceFiles.length - visibleEvidence.length
 
   return (
-    <div className="group border-b border-subtle/80 px-3 py-1.5 hover:bg-hover md:py-1 xl:px-4">
+    <div className="group border-b border-subtle/80 px-3 py-1.5 ui-transition hover:bg-hover md:py-1 xl:px-4">
       <div className="flex min-w-0 items-center gap-2">
         <span
           aria-hidden="true"
@@ -250,7 +250,7 @@ function ToolboxTechnology({
         ) : null}
       </div>
       <div className="min-w-0 pl-8">
-        <p className="mt-0.5 line-clamp-2 text-[11px] leading-4 break-words text-fg-muted">
+        <p className="mt-0.5 line-clamp-2 text-[11px] leading-4 break-words text-fg-muted group-hover:text-fg-secondary">
           {entry.description}
         </p>
         <button

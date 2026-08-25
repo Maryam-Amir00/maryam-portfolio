@@ -208,7 +208,7 @@ function HomeActions() {
             size={14}
             strokeWidth={1.75}
             aria-hidden="true"
-            className="ui-transition-transform motion-safe:group-hover:translate-x-px motion-safe:group-focus-visible:translate-x-px"
+            className="motion-nudge-x"
           />
           View Projects
         </button>
@@ -217,9 +217,9 @@ function HomeActions() {
           onClick={() => {
             openFile(FILE_ABOUT)
           }}
-          className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-1.5 rounded-[4px] border border-fg-muted/55 bg-tab px-3.5 py-1.5 text-[13px] text-fg ui-transition hover:border-fg-muted hover:bg-hover hover:text-fg active:bg-hover md:min-h-0"
+          className="group inline-flex min-h-11 cursor-pointer items-center justify-center gap-1.5 rounded-[4px] border border-fg-muted/55 bg-tab px-3.5 py-1.5 text-[13px] text-fg ui-transition hover:border-fg-muted hover:bg-hover hover:text-fg active:bg-hover md:min-h-0"
         >
-          <UserRound size={14} strokeWidth={1.75} aria-hidden="true" />
+          <UserRound size={14} strokeWidth={1.75} aria-hidden="true" className="motion-nudge-x" />
           About Me
         </button>
         <button
@@ -227,9 +227,9 @@ function HomeActions() {
           onClick={() => {
             openFile(FILE_RESUME)
           }}
-          className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-1.5 rounded-[4px] border border-fg-muted/55 bg-transparent px-3.5 py-1.5 text-[13px] text-fg/85 ui-transition hover:border-fg-muted hover:bg-hover hover:text-fg active:bg-hover md:min-h-0"
+          className="group inline-flex min-h-11 cursor-pointer items-center justify-center gap-1.5 rounded-[4px] border border-fg-muted/55 bg-transparent px-3.5 py-1.5 text-[13px] text-fg/85 ui-transition hover:border-fg-muted hover:bg-hover hover:text-fg active:bg-hover md:min-h-0"
         >
-          <FileText size={14} strokeWidth={1.75} aria-hidden="true" />
+          <FileText size={14} strokeWidth={1.75} aria-hidden="true" className="motion-nudge-x" />
           Open Resume
         </button>
       </div>
@@ -273,7 +273,7 @@ function HomeProfileLink({ href, label }: { href: string; label: string }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`Open ${personalInfo.name} ${label} profile`}
-      className="inline-flex min-h-11 cursor-pointer items-center gap-1 font-mono text-[12px] leading-none text-fg-secondary no-underline ui-transition [@media(hover:hover)]:hover:text-accent focus-visible:text-accent md:min-h-0 md:py-0.5"
+      className="group inline-flex min-h-11 cursor-pointer items-center gap-1 font-mono text-[12px] leading-none text-fg-secondary no-underline ui-transition [@media(hover:hover)]:hover:text-accent focus-visible:text-accent md:min-h-0 md:py-0.5"
       data-home-profile=""
     >
       <span>{label}</span>
@@ -281,7 +281,7 @@ function HomeProfileLink({ href, label }: { href: string; label: string }) {
         size={12}
         strokeWidth={1.75}
         aria-hidden="true"
-        className="shrink-0"
+        className="motion-nudge-x shrink-0"
       />
     </a>
   )
@@ -341,7 +341,7 @@ function HomeProof() {
             size={14}
             strokeWidth={1.75}
             aria-hidden="true"
-            className="shrink-0 ui-transition-transform motion-safe:group-hover/project:translate-x-[3px] motion-safe:group-focus-visible/project:translate-x-[3px]"
+            className="motion-nudge-x-3 shrink-0"
           />
         </button>
       </ProofItem>

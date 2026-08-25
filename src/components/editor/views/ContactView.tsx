@@ -305,14 +305,14 @@ function ProfileLink({ href, label }: { href: string; label: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group inline-flex min-h-11 w-full max-w-full items-center justify-between gap-3 text-fg-secondary ui-transition-transform hover:text-fg focus-visible:text-fg md:min-h-0"
+      className="group inline-flex min-h-11 w-full max-w-full items-center justify-between gap-3 text-fg-secondary ui-transition hover:text-fg focus-visible:text-fg md:min-h-0"
     >
       <span>{label}</span>
       <ExternalLink
         size={14}
         strokeWidth={1.75}
         aria-hidden="true"
-        className="shrink-0 text-fg-muted ui-transition-transform motion-safe:group-hover:translate-x-0.5 motion-safe:group-focus-visible:translate-x-0.5 group-hover:text-fg group-focus-visible:text-fg"
+        className="motion-nudge-x shrink-0 text-fg-muted ui-transition group-hover:text-fg group-focus-visible:text-fg"
       />
     </a>
   )

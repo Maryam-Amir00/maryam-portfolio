@@ -53,10 +53,15 @@ export function ProjectDemo({
           href={youtubeUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-11 items-center gap-1.5 text-[13px] text-fg-secondary ui-transition hover:text-fg md:min-h-0"
+          className="group inline-flex min-h-11 items-center gap-1.5 text-[13px] text-fg-secondary ui-transition hover:text-fg md:min-h-0"
         >
           Watch on YouTube
-          <ExternalLink size={14} strokeWidth={1.75} aria-hidden="true" />
+          <ExternalLink
+            size={14}
+            strokeWidth={1.75}
+            aria-hidden="true"
+            className="motion-nudge-x"
+          />
         </a>
       </p>
     </section>

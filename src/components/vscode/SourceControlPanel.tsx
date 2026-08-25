@@ -199,7 +199,7 @@ function MilestoneButton({
       aria-current={isActive ? "page" : undefined}
       aria-label={`Open ${heading}, ${pathLabel}`}
       className={[
-        "group relative mt-0.5 flex min-h-11 w-full cursor-pointer gap-2 py-2 pr-1.5 pl-1 text-left hover:bg-hover focus-visible:bg-hover md:min-h-0 md:py-1.5",
+        "group relative mt-0.5 flex min-h-11 w-full cursor-pointer gap-2 py-2 pr-1.5 pl-1 text-left ui-transition hover:bg-hover focus-visible:bg-hover md:min-h-0 md:py-1.5",
         isActive ? "bg-hover" : "",
       ].join(" ")}
     >

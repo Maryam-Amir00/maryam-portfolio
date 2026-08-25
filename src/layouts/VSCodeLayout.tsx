@@ -1,4 +1,5 @@
 import { SkipLink } from "../components/a11y/SkipLink"
+import { CursorEnhancement } from "../components/cursor/CursorEnhancement"
 import { EditorWorkspace } from "../components/editor/EditorWorkspace"
 import { ActivityBar } from "../components/vscode/ActivityBar"
 import { CommandPalette } from "../components/vscode/CommandPalette"
@@ -40,6 +41,7 @@ export function VSCodeLayout() {
       <StatusBar />
       <MobileActivityNav />
       <CommandPalette />
+      <CursorEnhancement />
     </div>
   )
 }

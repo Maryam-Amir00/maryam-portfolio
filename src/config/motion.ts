@@ -1,23 +1,23 @@
 export const motionDuration = {
   fast: 0.12,
-  base: 0.17,
-  editor: 0.15,
-  sidebar: 0.14,
-  overlay: 0.16,
-  palette: 0.18,
+  base: 0.16,
+  editor: 0.16,
+  sidebar: 0.16,
+  overlay: 0.19,
+  palette: 0.19,
   paletteExit: 0.14,
-  terminal: 0.15,
+  terminal: 0.16,
 } as const
 
 export const motionEase = [0.2, 0.8, 0.2, 1] as const
 
 export const editorEnter = {
-  initial: { opacity: 0.96, y: 2 },
+  initial: { opacity: 0.94, y: 3 },
   animate: { opacity: 1, y: 0 },
 } as const
 
 export const editorEnterReduced = {
-  initial: { opacity: 0.98 },
+  initial: { opacity: 1 },
   animate: { opacity: 1 },
 } as const
 
@@ -38,9 +38,9 @@ export const paletteOverlay = {
 } as const
 
 export const paletteSurface = {
-  initial: { opacity: 0, y: -6 },
+  initial: { opacity: 0, y: -4 },
   animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -3 },
+  exit: { opacity: 0, y: -2 },
 } as const
 
 export const paletteSurfaceReduced = {

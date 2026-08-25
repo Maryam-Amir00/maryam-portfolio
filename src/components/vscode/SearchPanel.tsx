@@ -145,13 +145,13 @@ function QuickSearches({ onSelect }: { onSelect: (term: string) => void }) {
               data-workspace-search-row=""
               onClick={() => onSelect(term)}
               aria-label={`Search for ${term}`}
-              className="group flex h-11 w-full cursor-pointer items-center gap-1.5 px-3 text-left text-[12px] text-fg-muted hover:bg-hover hover:text-fg focus-visible:bg-hover focus-visible:text-fg md:h-8 xl:px-4"
+              className="group flex h-11 w-full cursor-pointer items-center gap-1.5 px-3 text-left text-[12px] text-fg-muted ui-transition hover:bg-hover hover:text-fg focus-visible:bg-hover focus-visible:text-fg md:h-8 xl:px-4"
             >
               <ChevronRight
                 size={12}
                 strokeWidth={1.75}
                 aria-hidden="true"
-                className="shrink-0 text-fg-muted group-hover:text-fg group-focus-visible:text-fg"
+                className="shrink-0 text-fg-muted ui-transition group-hover:text-fg group-focus-visible:text-fg"
               />
               <span>{term}</span>
             </button>
@@ -204,7 +204,7 @@ function SearchGroup({
                 data-workspace-search-row=""
                 onClick={() => onOpen(result.entry.fileId)}
                 aria-label={`Open ${result.entry.fileName}: ${heading}`}
-                className="group relative w-full min-h-11 cursor-pointer px-3 py-2.5 text-left hover:bg-hover focus-visible:bg-hover md:min-h-0 md:py-1.5 xl:px-4"
+                className="group relative w-full min-h-11 cursor-pointer px-3 py-2.5 text-left ui-transition hover:bg-hover focus-visible:bg-hover md:min-h-0 md:py-1.5 xl:px-4"
               >
                 <span
                   aria-hidden="true"

@@ -21,8 +21,8 @@ export function ExplorerFile({ file, depth }: ExplorerFileProps) {
         }}
         style={{ paddingLeft: `${depth * 12 + 8}px` }}
         className={[
-          "flex min-h-11 w-full cursor-pointer items-center gap-1 py-1 text-[13px] ui-transition hover:bg-hover md:min-h-6 md:py-0",
-          isActive ? "bg-hover font-medium text-fg" : "text-fg-secondary",
+          "group flex min-h-11 w-full cursor-pointer items-center gap-1 py-1 text-[13px] ui-transition hover:bg-hover md:min-h-6 md:py-0",
+          isActive ? "bg-hover font-medium text-fg" : "text-fg-secondary hover:text-fg",
         ].join(" ")}
       >
         <span className="inline-block w-3 shrink-0" aria-hidden="true" />

@@ -83,7 +83,7 @@ export function MobileActivityNav() {
             onClick={tool.toggle}
             className={[
               "relative flex min-h-[52px] min-w-0 flex-1 flex-col items-center justify-center gap-0.5 px-1 text-fg-muted ui-transition [@media(max-height:500px)]:min-h-11",
-              pressed ? "font-medium text-fg" : "hover:text-fg",
+              pressed ? "font-medium text-fg" : "[@media(hover:hover)_and_(pointer:fine)]:hover:text-fg",
             ].join(" ")}
           >
             <span
