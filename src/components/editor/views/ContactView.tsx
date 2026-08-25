@@ -1,5 +1,21 @@
-import { useEffect, useRef, useState, type FormEvent, type InputHTMLAttributes, type Ref } from "react"
-import { Check, Copy, Mail, MapPin } from "lucide-react"
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type InputHTMLAttributes,
+  type ReactNode,
+  type Ref,
+} from "react"
+import {
+  Check,
+  Copy,
+  ExternalLink,
+  Mail,
+  MapPin,
+  Phone,
+  UserRound,
+} from "lucide-react"
 import {
   CONTACT_LIMITS,
   contactCopy,
@@ -7,7 +23,9 @@ import {
   contactRecipient,
 } from "../../../data/contactData"
 import {
-  getVisibleSocialLinks,
+  getContactGitHubUrl,
+  getContactLinkedInUrl,
+  getContactPhone,
   personalInfo,
 } from "../../../data/personalInfo"
 import {
@@ -30,6 +48,12 @@ const emptyForm: ContactFormValues = {
   message: "",
 }
 
+const sectionCommentClass =
+  "font-mono text-[13px] leading-5 text-[color-mix(in_srgb,var(--syntax-comment)_68%,white)]"
+
+const fieldSurfaceClass =
+  "a11y-scroll-target mt-1.5 w-full rounded-[4px] border bg-app px-3 py-2 text-base text-fg caret-accent ui-transition placeholder:text-fg-muted focus-visible:border-accent md:text-[14px]"
+
 export function ContactView() {
   return (
     <div className="flex min-h-full min-w-0 flex-col overflow-x-hidden">
@@ -39,10 +63,10 @@ export function ContactView() {
           { label: "contact.tsx", current: true },
         ]}
       />
-      <article className="mr-auto min-w-0 w-full max-w-[70rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
+      <article className="@container mr-auto min-w-0 w-full max-w-[70rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
         <CodeIntro />
         <Header />
-        <div className="mt-8 grid min-w-0 items-start gap-10 min-[900px]:grid-cols-[minmax(0,0.38fr)_minmax(0,0.62fr)]">
+        <div className="mt-8 grid min-w-0 items-stretch gap-10 @min-[42rem]:grid-cols-[minmax(15rem,0.32fr)_minmax(0,0.68fr)] @min-[42rem]:gap-0">
           <ContactDetails />
           <ContactForm />
         </div>
@@ -62,6 +86,19 @@ export function ContactView() {
 }
 
 function CodeIntro() {
+  const phone = getContactPhone()
+  const linkedin = getContactLinkedInUrl()
+  const github = getContactGitHubUrl()
+  const properties = [
+    { key: "name", value: personalInfo.name },
+    { key: "role", value: personalInfo.role },
+    { key: "email", value: personalInfo.email },
+    ...(phone ? [{ key: "phone", value: phone.display }] : []),
+    { key: "location", value: personalInfo.location },
+    ...(linkedin ? [{ key: "linkedin", value: "LinkedIn" }] : []),
+    ...(github ? [{ key: "github", value: "GitHub" }] : []),
+  ]
+
   return (
     <div
       aria-hidden="true"
@@ -71,24 +108,14 @@ function CodeIntro() {
         <span className="text-syntax-keyword">const</span>
         {" contact = {"}
       </p>
-      <p>
-        {"  "}
-        <span className="text-syntax-property">name</span>
-        {": "}
-        <span className="text-syntax-string">"{personalInfo.name}"</span>,
-      </p>
-      <p>
-        {"  "}
-        <span className="text-syntax-property">role</span>
-        {": "}
-        <span className="text-syntax-string">"{personalInfo.role}"</span>,
-      </p>
-      <p>
-        {"  "}
-        <span className="text-syntax-property">email</span>
-        {": "}
-        <span className="text-syntax-string">"{personalInfo.email}"</span>,
-      </p>
+      {properties.map((property) => (
+        <p key={property.key}>
+          {"  "}
+          <span className="text-syntax-property">{property.key}</span>
+          {": "}
+          <span className="text-syntax-string">"{property.value}"</span>,
+        </p>
+      ))}
       <p>{"};"}</p>
       <p className="mt-1">
         <span className="text-syntax-keyword">export default</span>
@@ -115,65 +142,183 @@ function Header() {
 }
 
 function ContactDetails() {
-  const socialLinks = getVisibleSocialLinks()
+  const phone = getContactPhone()
+  const linkedin = getContactLinkedInUrl()
+  const github = getContactGitHubUrl()
 
   return (
-    <section aria-label="Contact details" className="min-w-0">
-      <dl className="divide-y divide-subtle border-y border-subtle">
-        <div className="py-3.5">
-          <dt className="font-mono text-[12px] text-syntax-property">
-            contact.email
-          </dt>
-          <dd className="mt-1.5 min-w-0">
+    <section
+      aria-label="Direct channels"
+      className="min-w-0 @min-[42rem]:pr-8 @min-[56rem]:pr-10"
+    >
+      <p aria-hidden="true" className={sectionCommentClass}>
+        {contactCopy.channelsComment}
+      </p>
+      <dl className="mt-4 divide-y divide-subtle border-y border-subtle">
+        <CopyableChannelRow
+          code="contact.email"
+          icon={<Mail size={14} strokeWidth={1.75} aria-hidden="true" />}
+          copyValue={personalInfo.email}
+          copyIdleLabel={contactCopy.copyEmail}
+          copiedAnnouncement="Email copied to clipboard."
+          failedAnnouncement="Could not copy email. The address remains selectable."
+        >
+          <a
+            href={`mailto:${personalInfo.email}`}
+            className="inline-block max-w-full break-all text-fg ui-transition hover:text-accent"
+          >
+            {personalInfo.email}
+          </a>
+        </CopyableChannelRow>
+        {phone ? (
+          <CopyableChannelRow
+            code="contact.phone"
+            icon={<Phone size={14} strokeWidth={1.75} aria-hidden="true" />}
+            copyValue={phone.display}
+            copyIdleLabel={contactCopy.copyPhone}
+            copiedAnnouncement="Phone number copied to clipboard."
+            failedAnnouncement="Could not copy phone number. The number remains selectable."
+          >
             <a
-              href={`mailto:${personalInfo.email}`}
-              className="inline-block max-w-full text-[14px] leading-6 break-all text-fg-secondary ui-transition hover:text-accent"
+              href={phone.href}
+              className="inline-block max-w-full break-words text-fg ui-transition hover:text-accent"
             >
-              {personalInfo.email}
+              {phone.display}
             </a>
-          </dd>
-        </div>
-        <div className="py-3.5">
-          <dt className="font-mono text-[12px] text-syntax-property">
-            contact.location
-          </dt>
-          <dd className="mt-1.5 flex min-w-0 items-start gap-1.5 text-[14px] leading-6 text-fg-secondary">
-            <MapPin size={14} strokeWidth={1.75} className="mt-1 shrink-0" aria-hidden="true" />
-            {personalInfo.location}
-          </dd>
-        </div>
-        <div className="py-3.5">
-          <dt className="font-mono text-[12px] text-syntax-property">
-            contact.role
-          </dt>
-          <dd className="mt-1.5 text-[14px] leading-6 text-fg-secondary">
-            {personalInfo.role}
-          </dd>
-        </div>
+          </CopyableChannelRow>
+        ) : null}
+        {linkedin ? (
+          <ChannelRow code="contact.linkedin">
+            <ProfileLink
+              href={linkedin}
+              label={contactCopy.linkedinAction}
+            />
+          </ChannelRow>
+        ) : null}
+        {github ? (
+          <ChannelRow code="contact.github">
+            <ProfileLink
+              href={github}
+              label={contactCopy.githubAction}
+            />
+          </ChannelRow>
+        ) : null}
+        <ChannelRow
+          code="contact.location"
+          icon={<MapPin size={14} strokeWidth={1.75} aria-hidden="true" />}
+        >
+          {personalInfo.location}
+        </ChannelRow>
+        <ChannelRow
+          code="contact.role"
+          icon={<UserRound size={14} strokeWidth={1.75} aria-hidden="true" />}
+        >
+          {personalInfo.role}
+        </ChannelRow>
       </dl>
-      <CopyEmailButton />
-      {socialLinks.length > 0 ? (
-        <ul className="mt-5 flex flex-wrap gap-3">
-          {socialLinks.map((link) => (
-            <li key={link.id}>
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={`Open ${personalInfo.name}'s ${link.label} profile`}
-                className="font-mono text-[13px] text-fg-secondary ui-transition hover:text-accent"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      ) : null}
     </section>
   )
 }
 
-function CopyEmailButton() {
+function CopyableChannelRow({
+  code,
+  icon,
+  copyValue,
+  copyIdleLabel,
+  copiedAnnouncement,
+  failedAnnouncement,
+  children,
+}: {
+  code: string
+  icon: ReactNode
+  copyValue: string
+  copyIdleLabel: string
+  copiedAnnouncement: string
+  failedAnnouncement: string
+  children: ReactNode
+}) {
+  const clipboard = useClipboardStatus()
+  const liveMessage =
+    clipboard.status === "copied"
+      ? copiedAnnouncement
+      : clipboard.status === "failed"
+        ? failedAnnouncement
+        : ""
+
+  return (
+    <div className="py-4">
+      <dt className="flex items-center gap-1.5 font-mono text-[12px] text-syntax-property">
+        <span className="text-fg-muted">{icon}</span>
+        {code}
+      </dt>
+      <dd className="mt-2 min-w-0">
+        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+          <div className="min-w-0 flex-1 text-[14px] leading-6 text-fg">
+            {children}
+          </div>
+          <CopyValueButton
+            idleLabel={copyIdleLabel}
+            status={clipboard.status}
+            onCopy={() => {
+              void clipboard.copy(copyValue)
+            }}
+          />
+        </div>
+      </dd>
+      <p
+        aria-live="polite"
+        className={liveMessage ? "mt-1.5 text-[12px] text-fg-muted" : "sr-only"}
+      >
+        {clipboard.status === "copied" ? (
+          <span className="text-success">{liveMessage}</span>
+        ) : (
+          liveMessage
+        )}
+      </p>
+    </div>
+  )
+}
+
+function ChannelRow({
+  code,
+  icon,
+  children,
+}: {
+  code: string
+  icon?: ReactNode
+  children: ReactNode
+}) {
+  return (
+    <div className="py-4">
+      <dt className="flex items-center gap-1.5 font-mono text-[12px] text-syntax-property">
+        {icon ? <span className="text-fg-muted">{icon}</span> : null}
+        {code}
+      </dt>
+      <dd className="mt-2 min-w-0 text-[14px] leading-6 text-fg">{children}</dd>
+    </div>
+  )
+}
+
+function ProfileLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group inline-flex min-h-11 w-full max-w-full items-center justify-between gap-3 text-fg-secondary ui-transition-transform hover:text-fg focus-visible:text-fg md:min-h-0"
+    >
+      <span>{label}</span>
+      <ExternalLink
+        size={14}
+        strokeWidth={1.75}
+        aria-hidden="true"
+        className="shrink-0 text-fg-muted ui-transition-transform motion-safe:group-hover:translate-x-0.5 motion-safe:group-focus-visible:translate-x-0.5 group-hover:text-fg group-focus-visible:text-fg"
+      />
+    </a>
+  )
+}
+
+function useClipboardStatus() {
   const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle")
 
   useEffect(() => {
@@ -190,46 +335,40 @@ function CopyEmailButton() {
     }
   }, [status])
 
-  async function copyEmail() {
+  async function copy(value: string) {
     try {
-      await navigator.clipboard.writeText(personalInfo.email)
+      await navigator.clipboard.writeText(value)
       setStatus("copied")
     } catch {
       setStatus("failed")
     }
   }
 
-  const liveMessage =
-    status === "copied"
-      ? "Email copied to clipboard."
-      : status === "failed"
-        ? "Could not copy email. The address remains selectable."
-        : ""
+  return { status, copy }
+}
 
+function CopyValueButton({
+  idleLabel,
+  status,
+  onCopy,
+}: {
+  idleLabel: string
+  status: "idle" | "copied" | "failed"
+  onCopy: () => void
+}) {
   return (
-    <div className="mt-4">
-      <button
-        type="button"
-        onClick={() => {
-          void copyEmail()
-        }}
-        className="inline-flex min-h-11 w-full max-w-full cursor-pointer items-center justify-center gap-1.5 rounded-[4px] border border-subtle px-3 py-1.5 text-[13px] text-fg-secondary ui-transition hover:bg-hover hover:text-fg md:w-auto"
-      >
-        {status === "copied" ? (
-          <Check size={14} strokeWidth={1.75} className="text-success" aria-hidden="true" />
-        ) : (
-          <Copy size={14} strokeWidth={1.75} aria-hidden="true" />
-        )}
-        {status === "copied" ? "Copied" : "Copy Email"}
-      </button>
-      <p aria-live="polite" className="mt-2 min-h-5 text-[12px] text-fg-muted">
-        {status === "copied" ? (
-          <span className="text-success">{liveMessage}</span>
-        ) : (
-          liveMessage
-        )}
-      </p>
-    </div>
+    <button
+      type="button"
+      onClick={onCopy}
+      className="inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center gap-1 rounded-[3px] border border-subtle bg-tab px-2 py-0.5 text-[11px] text-fg-muted ui-transition hover:border-fg-muted hover:bg-hover hover:text-fg md:min-h-7"
+    >
+      {status === "copied" ? (
+        <Check size={13} strokeWidth={1.75} className="text-success" aria-hidden="true" />
+      ) : (
+        <Copy size={13} strokeWidth={1.75} aria-hidden="true" />
+      )}
+      {status === "copied" ? contactCopy.copied : idleLabel}
+    </button>
   )
 }
 
@@ -289,11 +428,14 @@ function ContactForm() {
   }
 
   return (
-    <section aria-label="Message composer" className="min-w-0">
-      <p aria-hidden="true" className="font-mono text-[13px] text-syntax-comment">
-        {"// compose message"}
+    <section
+      aria-label="Message composer"
+      className="min-w-0 @min-[42rem]:border-l @min-[42rem]:border-subtle @min-[42rem]:pl-8 @min-[56rem]:pl-10"
+    >
+      <p aria-hidden="true" className={sectionCommentClass}>
+        {contactCopy.composeComment}
       </p>
-      <form className="mt-4" noValidate onSubmit={handleSubmit}>
+      <form className="mt-4 max-w-[38rem]" noValidate onSubmit={handleSubmit}>
         {formAlert ? (
           <p role="alert" className="mb-3 text-[13px] leading-5 text-error">
             {formAlert}
@@ -368,12 +510,9 @@ function ContactForm() {
           </button>
           <p
             id="contact-compose-note"
-            className="mt-2 max-w-[32rem] text-[12px] leading-5 text-fg-muted"
+            className="mt-2.5 max-w-[28rem] text-[12px] leading-[1.45] text-fg-muted"
           >
             {contactCopy.composeNote}
-          </p>
-          <p className="mt-1 max-w-[32rem] text-[12px] leading-5 text-fg-muted">
-            {contactCopy.privacyNote}
           </p>
         </div>
       </form>
@@ -424,9 +563,7 @@ function ContactField({
         onChange={(event) => {
           onChange(event.target.value)
         }}
-        className={`a11y-scroll-target mt-1.5 w-full rounded-[4px] border bg-tab px-3 py-2 text-base text-fg caret-accent ui-transition placeholder:text-fg-muted md:text-[14px] ${
-          invalid ? "border-error" : "border-subtle"
-        }`}
+        className={`${fieldSurfaceClass} ${invalid ? "border-error" : "border-fg-muted/45"}`}
       />
       {error ? (
         <p id={errorId} className="mt-1.5 text-[12px] leading-5 text-error">
@@ -455,8 +592,8 @@ function MessageField({
 
   return (
     <div className="mt-4">
-      <div className="flex items-baseline justify-between gap-3">
-        <label htmlFor="contact-message" className="block">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+        <label htmlFor="contact-message" className="min-w-0">
           <span className="font-mono text-[12px] text-fg">
             {contactCopy.fieldLabels.message}
           </span>
@@ -467,7 +604,7 @@ function MessageField({
             {contactCopy.fieldKeys.message}
           </span>
         </label>
-        <p className="font-mono text-[11px] text-fg-muted">
+        <p className="shrink-0 font-mono text-[11px] leading-4 text-fg-muted">
           {value.length} / {CONTACT_LIMITS.messageMax}
         </p>
       </div>
@@ -484,8 +621,8 @@ function MessageField({
         onChange={(event) => {
           onChange(event.target.value)
         }}
-        className={`a11y-scroll-target mt-1.5 min-h-[10.5rem] w-full resize-y rounded-[4px] border bg-tab px-3 py-2 text-base leading-6 text-fg caret-accent ui-transition placeholder:text-fg-muted md:min-h-0 md:text-[14px] ${
-          invalid ? "border-error" : "border-subtle"
+        className={`${fieldSurfaceClass} min-h-[10.5rem] resize-y leading-6 md:min-h-0 ${
+          invalid ? "border-error" : "border-fg-muted/45"
         }`}
       />
       {error ? (

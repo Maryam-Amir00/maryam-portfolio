@@ -40,23 +40,23 @@ export type ExperienceEntry = {
 
 export const currentExperience: ExperienceEntry = {
   id: "utility-access-services",
-  role: "Frontend Developer",
+  role: "Frontend Developer Intern",
   company: "Utility Access Services",
   location: "Lahore, Pakistan",
   startDate: "2026-05",
   startDateDisplay: "May 2026",
-  endDate: "present",
-  endDateDisplay: "Present",
-  employmentStatus: "current",
-  productContext: "multi-tenant POS SaaS platform",
+  endDate: "2026-07",
+  endDateDisplay: "July 2026",
+  employmentStatus: "previous",
+  productContext: "multi tenant POS SaaS platform",
   summary:
-    "Maryam contributes frontend development for a multi-tenant POS SaaS platform, working across reusable UI architecture, authentication flows, dashboards, REST API integrations, and application data-fetching performance.",
+    "I contributed to frontend development for a multi tenant POS SaaS platform, working across reusable UI architecture, authentication flows, dashboards, REST API integrations, and application data fetching performance.",
   note: "Production UI is an engineering system, not a collection of screens.",
   metrics: [
     {
       id: "ui-duplication",
       value: "~30%",
-      label: "Estimated duplicate UI reduction",
+      label: "Less duplicate UI code",
     },
     {
       id: "dashboards",
@@ -66,12 +66,12 @@ export const currentExperience: ExperienceEntry = {
     {
       id: "api-refetch",
       value: "~20%",
-      label: "Estimated API re-fetch reduction",
+      label: "Fewer unnecessary API refetches",
     },
     {
       id: "rbac-roles",
       value: "3+",
-      label: "User roles in RBAC",
+      label: "User roles with RBAC",
     },
   ],
   highlights: [
@@ -80,15 +80,15 @@ export const currentExperience: ExperienceEntry = {
       index: "01",
       title: "Reusable UI Architecture",
       description:
-        "Built a reusable React component library for client-facing modules of the multi-tenant POS SaaS platform, reducing duplicated interface code by an estimated 30%.",
+        "Built a reusable React component library for client facing modules of the multi tenant POS SaaS platform, reducing duplicate interface code by an estimated 30%.",
       technologies: ["React"],
     },
     {
       id: "auth-rbac",
       index: "02",
-      title: "Authentication & Access Control",
+      title: "Authentication and Access Control",
       description:
-        "Implemented frontend JWT authentication flows, protected routes, and role-based access control across 3+ user roles, integrated with backend REST APIs.",
+        "Implemented frontend JWT authentication flows, protected routes, and role based access control across 3+ user roles, integrated with backend REST APIs.",
       technologies: ["JWT", "REST APIs", "Protected Routes", "RBAC"],
     },
     {
@@ -96,7 +96,7 @@ export const currentExperience: ExperienceEntry = {
       index: "03",
       title: "Interactive SaaS Dashboards",
       description:
-        "Built 5+ interactive dashboards using React, Recharts, and GSAP, improving visibility into real-time business metrics for platform users.",
+        "Built 5+ interactive dashboards using React, Recharts, and GSAP, improving visibility into business metrics for platform users.",
       technologies: ["React", "Recharts", "GSAP"],
     },
     {
@@ -104,12 +104,12 @@ export const currentExperience: ExperienceEntry = {
       index: "04",
       title: "API Data Flow Optimization",
       description:
-        "Optimized frontend data-fetching patterns with TanStack Query and token refresh logic, reducing unnecessary API re-fetches by an estimated 20%.",
+        "Optimized frontend data fetching patterns with TanStack Query and token refresh logic, reducing unnecessary API refetches by an estimated 20%.",
       technologies: ["TanStack Query", "REST APIs", "Token Refresh"],
     },
   ],
   workflow: [
-    { id: "agile", key: "workflow.agile", value: "2-week sprint cycle" },
+    { id: "agile", key: "workflow.agile", value: "2 week Agile sprints" },
     { id: "versioning", key: "workflow.versioning", value: "Git" },
     { id: "containers", key: "workflow.containers", value: "Docker" },
     { id: "data", key: "workflow.data", value: "PostgreSQL / Supabase" },

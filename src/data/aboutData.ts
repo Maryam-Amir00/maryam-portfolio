@@ -2,23 +2,23 @@ import { personalInfo } from "./personalInfo"
 
 export const aboutIntro = {
   paragraphs: [
-    "Maryam Amir is a Full-Stack Developer working primarily with React and Django. Her work sits across the parts of a product that have to stay in agreement: interfaces, REST APIs, authentication, dashboards, and PostgreSQL-backed data.",
-    "She is more interested in software that stays readable and useful than in surfaces that only look finished. That means paying attention to how a feature is structured, how data moves, and how the next change will land.",
+    "I am a Full Stack Developer building across frontend and backend with React, JavaScript, Django, and PostgreSQL.",
+    "My work focuses on how interfaces, APIs, authentication, data, and application structure fit together as one system.",
   ],
   quote:
-    "I like understanding how the whole product fits together — from the interface a user touches to the API and data behind it.",
+    "I like understanding how the whole product fits together, from the interface a user touches to the API and data behind it.",
 }
 
 export const whatIBuild = {
   intro:
-    "Most of the work she takes on is full-stack in a practical sense: a React interface talking to a Django API, with auth, data, and an operational or analytics view on top.",
+    "Most of the work I take on connects a React interface to a Django API, with authentication, data, and an operational or analytics view on top.",
   items: [
     "responsive React interfaces",
-    "REST API-driven applications",
-    "authentication and role-based flows",
-    "analytics dashboards and data visualization",
-    "database-backed web applications",
-    "reusable frontend components",
+    "REST API applications",
+    "authentication and role based flows",
+    "analytics dashboards",
+    "database backed applications",
+    "reusable component systems",
   ],
 }
 
@@ -26,7 +26,7 @@ export const engineeringPrinciples = [
   {
     id: "01",
     title: "Maintainability",
-    body: "Prefer reusable components and clear boundaries over duplicated UI and one-off logic.",
+    body: "Prefer reusable components and clear boundaries over duplicated UI and one off logic.",
   },
   {
     id: "02",
@@ -46,16 +46,16 @@ export const engineeringPrinciples = [
   {
     id: "05",
     title: "Iteration",
-    body: "Build, test, improve, and refactor rather than trying to over-engineer the first version.",
+    body: "Build, test, improve, and refactor rather than trying to over engineer the first version.",
   },
 ] as const
 
 export const currentFocus = {
   intro:
-    "She is currently focused on deepening full-stack application architecture — moving from making features work toward clearer patterns around scalability, maintainability, and production practices.",
+    "I am focused on building complete web applications across frontend and backend, using React for client interfaces, Django REST Framework for APIs, and PostgreSQL for data.",
   items: [
-    "full-stack architecture",
-    "scalable React patterns",
+    "frontend development",
+    "backend development",
     "REST API design",
     "PostgreSQL",
     "production engineering",
@@ -71,7 +71,7 @@ export const education = {
 
 export const quickProfile = [
   { label: "role", value: personalInfo.role },
-  { label: "stack", value: personalInfo.specialization },
+  { label: "stack", value: "React · JavaScript · Django" },
   { label: "database", value: "PostgreSQL" },
   { label: "location", value: personalInfo.location },
   { label: "education", value: "BS Information Technology" },

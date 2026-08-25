@@ -4,13 +4,17 @@ import { studySyncProject } from "../../../data/projectsData"
 import { ArchitectureFlow } from "../../projects/ArchitectureFlow"
 import { DataFlow } from "../../projects/DataFlow"
 import { EngineeringDecisionList } from "../../projects/EngineeringDecisionList"
+import { ProjectDemo } from "../../projects/ProjectDemo"
+import { ProjectExternalActions } from "../../projects/ProjectExternalActions"
 import { ProjectHeader } from "../../projects/ProjectHeader"
 import { ProjectMeta } from "../../projects/ProjectMeta"
 import { ProjectNavigation } from "../../projects/ProjectNavigation"
 import { ProjectSectionHeading } from "../../projects/ProjectSectionHeading"
+import { getSafeProjectLinks } from "../../projects/projectLinks"
 import { EditorBreadcrumbs } from "../EditorBreadcrumbs"
 
 const project = studySyncProject
+const links = getSafeProjectLinks(project)
 
 export function StudySyncView() {
   return (
@@ -22,20 +26,45 @@ export function StudySyncView() {
           { label: project.fileName, current: true },
         ]}
       />
-      <article className="mr-auto min-w-0 w-full max-w-[72rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
-        <CodeIntro />
-        <ProjectHeader project={project} />
-        <ProjectMeta items={project.metadata} />
-        <ArchitectureSection />
-        <CapabilitiesSection />
-        <DecisionsSection />
-        <DataFlowSection />
-        {project.authFlow && project.authFlowDescription ? (
-          <AuthFlowSection />
-        ) : null}
-        <ChallengesSection />
-        <AnalyticsSection />
-        <DemonstratesSection />
+      <article className="@container mr-auto min-w-0 w-full max-w-[86rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
+        <div className="border-b border-subtle pb-10 md:pb-14">
+          <CodeIntro />
+          <ProjectHeader project={project} />
+          <ProjectMeta items={project.metadata} />
+          {links.youtube && project.demoIntro ? (
+            <ProjectDemo
+              intro={project.demoIntro}
+              youtubeUrl={links.youtube}
+              videoId={links.videoId}
+            />
+          ) : null}
+        </div>
+
+        <div className="border-b border-subtle py-10 md:py-16">
+          <ArchitectureSection />
+          <CapabilitiesSection />
+        </div>
+
+        <div className="border-b border-subtle py-10 md:py-16">
+          <DecisionsSection />
+        </div>
+
+        <div className="border-b border-subtle py-10 md:py-16">
+          <DataFlowSection />
+          {project.authFlow && project.authFlowDescription ? (
+            <AuthFlowSection />
+          ) : null}
+          <ChallengesSection />
+        </div>
+
+        <div className="py-10 md:py-16">
+          <AnalyticsSection />
+          <DemonstratesSection />
+          <div className="mt-10 md:mt-12">
+            <ProjectExternalActions project={project} />
+          </div>
+        </div>
+
         <ProjectNavigation next={project.next} back={project.back} />
       </article>
     </div>
@@ -87,8 +116,8 @@ function CodeIntro() {
 
 function ArchitectureSection() {
   return (
-    <section className="mt-10">
-      <ProjectSectionHeading comment="architecture">
+    <section>
+      <ProjectSectionHeading comment="architecture" prominence="strong">
         Tech Architecture
       </ProjectSectionHeading>
       <ArchitectureFlow
@@ -101,8 +130,8 @@ function ArchitectureSection() {
 
 function CapabilitiesSection() {
   return (
-    <section className="mt-10">
-      <ProjectSectionHeading comment="core capabilities">
+    <section className="mt-10 md:mt-16">
+      <ProjectSectionHeading comment="core capabilities" prominence="strong">
         Core Capabilities
       </ProjectSectionHeading>
       <ol className="divide-y divide-subtle border-y border-subtle">
@@ -129,20 +158,23 @@ function CapabilitiesSection() {
 
 function DecisionsSection() {
   return (
-    <section className="mt-10">
-      <ProjectSectionHeading comment="engineering decisions">
+    <section>
+      <ProjectSectionHeading comment="engineering decisions" prominence="strong">
         Engineering Decisions
       </ProjectSectionHeading>
-      <EngineeringDecisionList decisions={project.engineeringDecisions} />
+      <EngineeringDecisionList
+        decisions={project.engineeringDecisions}
+        roomy
+      />
     </section>
   )
 }
 
 function DataFlowSection() {
   return (
-    <section className="mt-10">
-      <ProjectSectionHeading comment="application data flow">
-        Full-Stack Data Flow
+    <section>
+      <ProjectSectionHeading comment="application data flow" prominence="strong">
+        Full Stack Data Flow
       </ProjectSectionHeading>
       <DataFlow
         stages={project.dataFlow}
@@ -161,15 +193,14 @@ function AuthFlowSection() {
   }
 
   return (
-    <section className="mt-10">
-      <ProjectSectionHeading comment="authentication">
+    <section className="mt-10 md:mt-16">
+      <ProjectSectionHeading comment="authentication" prominence="strong">
         Authentication Flow
       </ProjectSectionHeading>
-      <p className="sr-only">{description}</p>
-      <ol
-        aria-hidden="true"
-        className="flex min-w-0 flex-col gap-2 min-[720px]:flex-row min-[720px]:flex-wrap min-[720px]:items-center min-[720px]:gap-x-2 min-[720px]:gap-y-3"
-      >
+      <p className="mb-5 max-w-[46rem] text-[14px] leading-6 text-fg-secondary">
+        {description}
+      </p>
+      <ol className="flex min-w-0 flex-col gap-2 min-[720px]:flex-row min-[720px]:flex-wrap min-[720px]:items-center min-[720px]:gap-x-3 min-[720px]:gap-y-3">
         {stages.map((stage, index) => (
           <Fragment key={stage.id}>
             <li className="min-w-0 font-mono text-[13px] text-fg-secondary">
@@ -178,7 +209,10 @@ function AuthFlowSection() {
               {stage.label}
             </li>
             {index < stages.length - 1 ? (
-              <li className="flex justify-center text-fg-muted min-[720px]:items-center">
+              <li
+                aria-hidden="true"
+                className="flex justify-center text-fg-muted min-[720px]:items-center"
+              >
                 <ArrowDown
                   size={14}
                   strokeWidth={1.75}
@@ -200,15 +234,15 @@ function AuthFlowSection() {
 
 function ChallengesSection() {
   return (
-    <section className="mt-10">
-      <ProjectSectionHeading comment="technical challenges">
+    <section className="mt-10 md:mt-16">
+      <ProjectSectionHeading comment="technical challenges" prominence="strong">
         Technical Challenges
       </ProjectSectionHeading>
       <ul className="divide-y divide-subtle border-y border-subtle">
         {project.challenges.map((item) => (
           <li key={item.id} className="py-5">
             <h3 className="text-[1.02rem] font-medium text-fg">{item.title}</h3>
-            <dl className="mt-3 grid gap-4 min-[800px]:grid-cols-2">
+            <dl className="mt-3 grid gap-5 min-[800px]:grid-cols-2 min-[800px]:gap-8">
               <div className="min-w-0">
                 <dt className="font-mono text-[11px] tracking-[0.08em] text-syntax-property">
                   challenge
@@ -221,7 +255,7 @@ function ChallengesSection() {
                 <dt className="font-mono text-[11px] tracking-[0.08em] text-syntax-property">
                   approach
                 </dt>
-                <dd className="mt-1.5 max-w-[36rem] text-[14px] leading-6 text-fg-secondary">
+                <dd className="mt-1.5 max-w-[36rem] text-[14px] leading-6 text-fg">
                   {item.approach}
                 </dd>
               </div>
@@ -235,8 +269,8 @@ function ChallengesSection() {
 
 function AnalyticsSection() {
   return (
-    <section className="mt-10">
-      <ProjectSectionHeading comment="analytics">
+    <section>
+      <ProjectSectionHeading comment="analytics" prominence="strong">
         {project.analytics.heading}
       </ProjectSectionHeading>
       <p className="max-w-[46rem] text-[15px] leading-[1.7] text-fg-secondary">
@@ -267,8 +301,8 @@ function AnalyticsSection() {
 
 function DemonstratesSection() {
   return (
-    <section className="mt-10">
-      <ProjectSectionHeading comment="coverage">
+    <section className="mt-10 border-t border-subtle pt-10 md:mt-12 md:pt-16">
+      <ProjectSectionHeading comment="coverage" prominence="strong">
         What This Project Demonstrates
       </ProjectSectionHeading>
       <p className="max-w-[46rem] text-[15px] leading-[1.7] text-fg-secondary">

@@ -61,11 +61,11 @@ export const careerMilestones: readonly PortfolioHistoryEntry[] = [
     period: formatExperiencePeriod(currentExperience),
     location: currentExperience.location,
     summary:
-      "Frontend engineering for a multi-tenant POS SaaS environment across reusable UI architecture, authentication, dashboards, and API-driven application flows.",
+      "Frontend engineering for a multi tenant POS SaaS environment across reusable UI architecture, authentication, dashboards, and API driven application flows.",
     highlights: [
       "Reusable React architecture",
       "JWT / RBAC flows",
-      "Dashboard & API-driven UI",
+      "Dashboard and API driven UI",
     ],
     technologies: ["React", "JWT", "TanStack Query"],
     isCurrent: currentExperience.employmentStatus === "current",
@@ -92,9 +92,9 @@ export const projectSnapshots: readonly PortfolioHistoryEntry[] = [
     kind: "project",
     title: studySyncProject.name,
     subtitle: studySyncProject.subtitle,
-    focus: "Full-Stack Engineering",
+    focus: "Full Stack Engineering",
     summary:
-      "React + Django REST Framework application using PostgreSQL, TanStack Query, TanStack Router and JWT-based authentication.",
+      "React + Django REST Framework application using PostgreSQL, TanStack Query, TanStack Router and JWT based authentication.",
     technologies: studySyncProject.introStack,
     relatedFileId: FILE_STUDYSYNC,
   },
@@ -117,7 +117,7 @@ export const projectSnapshots: readonly PortfolioHistoryEntry[] = [
     subtitle: styliqueProject.subtitle,
     focus: styliqueProject.role,
     summary:
-      "React storefront using Context API, React Router, persistent cart/wishlist state and a mobile-first reusable UI structure.",
+      "React storefront using Context API, React Router, persistent cart/wishlist state and a mobile first reusable UI structure.",
     technologies: styliqueProject.introStack,
     metric: "10+ routed views",
     relatedFileId: FILE_STYLIQUE,

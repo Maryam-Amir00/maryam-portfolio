@@ -59,7 +59,7 @@ function PortfolioHistoryNotice() {
           aria-hidden="true"
         />
         <span>
-          Git-inspired portfolio milestones. These entries are not repository
+          Git inspired portfolio milestones. These entries are not repository
           commits.
         </span>
       </p>

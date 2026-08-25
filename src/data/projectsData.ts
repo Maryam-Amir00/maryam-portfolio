@@ -75,6 +75,12 @@ export type ProjectNavigationTarget = {
   actionLabel: string
 }
 
+export type ProjectLinks = {
+  live?: string
+  github?: string
+  youtube?: string
+}
+
 export type PortfolioProject = {
   id: string
   fileId: string
@@ -92,8 +98,11 @@ export type PortfolioProject = {
   stackLabel: string
   databaseLabel?: string
   introStack: readonly string[]
+  links?: ProjectLinks
   githubUrl?: string
   liveUrl?: string
+  youtubeUrl?: string
+  demoIntro?: string
   screenshots?: readonly string[]
   metadata: readonly ProjectMetaItem[]
   technologies: readonly ProjectTechnology[]
@@ -208,6 +217,7 @@ export type StyliqueProject = PortfolioProject & {
   }
   persistence: {
     summary: string
+    note?: string
     sharedRole: string
     persistedRole: string
     persistFlow: readonly FlowStage[]
@@ -250,17 +260,24 @@ export const studySyncProject = {
   index: 1,
   total: PROJECT_COUNT,
   subtitle: "Collaborative Academic Platform",
-  type: "Full-Stack Application",
-  role: "Full-Stack Development",
+  type: "Full Stack Application",
+  role: "Full Stack Development",
   summary:
-    "StudySync is a full-stack collaborative platform that allows users to create communities, publish content and participate in threaded discussions, backed by secure authentication, REST APIs and relational data.",
+    "StudySync is a full stack collaborative platform where users create communities, publish content, and take part in threaded discussions, with authentication, REST APIs, and an analytics view.",
   stackLabel: "React + Django",
   databaseLabel: "PostgreSQL",
-  introStack: ["React", "Django", "PostgreSQL"],
+  introStack: ["React", "TypeScript", "Django", "PostgreSQL"],
+  links: {
+    live: "https://study-sync-pi-six.vercel.app/",
+    github: "https://github.com/Maryam-Amir00/StudySync",
+    youtube: "https://youtu.be/bWcKpspkEIM?si=RqvXRD_dKXaR2ZRi",
+  },
+  demoIntro:
+    "A walkthrough of StudySync's main product flows and interface.",
   metadata: [
-    { id: "type", label: "Type", value: "Full-Stack Application" },
-    { id: "role", label: "Role", value: "Full-Stack Development" },
-    { id: "stack", label: "Stack", value: "React + Django" },
+    { id: "type", label: "Type", value: "Full Stack Application" },
+    { id: "focus", label: "Focus", value: "Frontend + Backend" },
+    { id: "stack", label: "Stack", value: "React · TypeScript · Django" },
     { id: "database", label: "Database", value: "PostgreSQL" },
   ],
   technologies: [
@@ -303,7 +320,7 @@ export const studySyncProject = {
     },
   ],
   architectureDescription:
-    "Application flow: React client with Vite, Tailwind CSS, TanStack Query and TanStack Router, through a REST API handled by Django REST Framework with JWT authentication, to PostgreSQL.",
+    "The application is organized as a React client, a Django REST API, and a PostgreSQL data store.",
   features: [
     {
       id: "communities",
@@ -323,21 +340,21 @@ export const studySyncProject = {
       index: "03",
       title: "Threaded Discussions",
       description:
-        "Built a real-time threaded discussion experience for community conversations.",
+        "Built threaded discussions for community conversations while preserving reply context.",
     },
     {
       id: "authentication",
       index: "04",
       title: "Secure Authentication",
       description:
-        "JWT-based authentication protects application access and API interactions.",
+        "JWT based authentication protects application access.",
     },
     {
       id: "analytics",
       index: "05",
       title: "Analytics",
       description:
-        "An interactive analytics dashboard tracks user activity and engagement.",
+        "Users can view an analytics dashboard of activity and engagement.",
     },
   ],
   engineeringDecisions: [
@@ -345,22 +362,22 @@ export const studySyncProject = {
       id: "routing",
       index: "01",
       key: "decision_01",
-      title: "Type-Safe Routing",
+      title: "Type Safe Routing",
       problem:
         "A growing application with multiple views requires reliable route organization and navigation.",
-      approach: "Used TanStack Router to implement type-safe routing.",
+      approach: "Used TanStack Router to implement type safe routing.",
       outcome:
-        "Improves route consistency and reduces routing-related mistakes in a TypeScript/React application.",
+        "Improves route consistency and reduces routing related mistakes in a TypeScript React application.",
     },
     {
       id: "server-state",
       index: "02",
       key: "decision_02",
-      title: "Server-State Management",
+      title: "Server State Management",
       problem:
-        "API-driven applications need clean handling of fetching, caching, loading and stale server data.",
+        "API driven applications need clean handling of fetching, caching, loading and stale server data.",
       approach:
-        "Used TanStack Query to manage and optimize server-state and data-fetching behavior.",
+        "Used TanStack Query to manage and optimize server state and data fetching behavior.",
       outcome:
         "Keeps remote data logic separate from ordinary UI state and improves maintainability.",
     },
@@ -368,7 +385,7 @@ export const studySyncProject = {
       id: "api",
       index: "03",
       key: "decision_03",
-      title: "API-Driven Backend",
+      title: "API Driven Backend",
       problem:
         "The React frontend needs a structured backend contract for application data and authentication flows.",
       approach:
@@ -417,7 +434,7 @@ export const studySyncProject = {
     { id: "data", index: "04", label: "Data", detail: "PostgreSQL" },
   ],
   dataFlowDescription:
-    "A user action moves from the React UI through TanStack Query to a REST API handled by Django REST Framework, then PostgreSQL, and back to the updated UI.",
+    "A user action travels from the React UI into TanStack Query, then to Django REST Framework and PostgreSQL, and the updated result returns to the interface.",
   authFlow: [
     { id: "user", index: "01", label: "User" },
     { id: "login", index: "02", label: "Login UI" },
@@ -434,22 +451,23 @@ export const studySyncProject = {
       challenge:
         "Managing remote API data while keeping the UI responsive and consistent.",
       approach:
-        "TanStack Query isolates server-state so fetching, caching and loading stay separate from ordinary UI state.",
+        "Kept remote data in TanStack Query so UI state stayed local to interaction instead of mixing with API cache and loading status.",
     },
     {
       id: "navigation",
       title: "Structuring Growing Navigation",
-      challenge: "Keeping routes organized as the application grows.",
+      challenge:
+        "New views can scatter navigation if routes are added without a shared structure.",
       approach:
-        "TanStack Router provides type-safe route definitions so navigation stays consistent as views are added.",
+        "Attach each view to the TanStack Router map so the growing interface stays on one typed navigation system.",
     },
     {
       id: "auth-surface",
       title: "Authentication Across Frontend and API",
       challenge:
-        "Ensuring protected parts of the application communicate correctly with authenticated REST endpoints.",
+        "Protected views on the client and protected endpoints on the API must stay in agreement.",
       approach:
-        "JWT authentication is applied across application access and REST API interactions.",
+        "The client gates those views while the API validates JWT on the corresponding REST requests.",
     },
     {
       id: "threaded-ux",
@@ -461,18 +479,18 @@ export const studySyncProject = {
     },
   ],
   analytics: {
-    heading: "Analytics & Engagement",
+    heading: "Analytics and Engagement",
     description:
-      "StudySync includes an interactive analytics dashboard designed to track user activity and engagement.",
+      "An interactive analytics dashboard tracks user activity and engagement.",
     tracks: ["user activity", "engagement"],
   },
   demonstratesIntro:
-    "StudySync shows how a React client, typed routing, server-state, REST APIs, JWT authentication and PostgreSQL work together in one full-stack application.",
+    "StudySync demonstrates frontend application structure, server state, routing, REST APIs, JWT authentication, and relational data working as one system.",
   demonstrates: [
     {
       id: "frontend",
       label: "Frontend",
-      value: "React · TypeScript ecosystem · Tailwind",
+      value: "React · TypeScript · Tailwind CSS",
     },
     {
       id: "state",
@@ -485,7 +503,7 @@ export const studySyncProject = {
       label: "Backend",
       value: "Django REST Framework",
     },
-    { id: "auth", label: "Auth", value: "JWT" },
+    { id: "auth", label: "Authentication", value: "JWT" },
     { id: "database", label: "Database", value: "PostgreSQL" },
   ],
   next: {
@@ -512,9 +530,15 @@ export const movixxxProject = {
   type: "Movie Search App",
   role: "Frontend Engineering",
   summary:
-    "Movixxx is a React-based movie search experience built around the OMDb API, with an emphasis on efficient search requests, persistent watchlist state and responsive interaction.",
+    "Movixxx is a React based movie search experience built around the OMDb API, with an emphasis on efficient search requests, persistent watchlist state and responsive interaction.",
   stackLabel: "React + Tailwind CSS + OMDb API",
   introStack: ["React", "Tailwind CSS", "OMDb API"],
+  links: {
+    live: "https://genuine-paletas-fe3530.netlify.app/",
+    github: "https://github.com/Maryam-Amir00/Movixxx_app",
+    youtube: "https://youtu.be/fkXXVMhXJLs?si=EcOjv3eIt_VgLXrN",
+  },
+  demoIntro: "A walkthrough of Movixxx search, results, and watchlist.",
   intro: {
     app: "Movixxx",
     source: "OMDb API",
@@ -545,14 +569,14 @@ export const movixxxProject = {
       id: "api",
       index: "02",
       title: "API Integration",
-      description: "Integrated movie search data through the OMDb API.",
+      description: "Integrates movie search data through the OMDb API.",
     },
     {
       id: "watchlist",
       index: "03",
       title: "Persistent Watchlist",
       description:
-        "Used Context API and localStorage to preserve user-selected movies across sessions.",
+        "Uses Context API and localStorage to preserve user selected movies across sessions.",
     },
     {
       id: "loading",
@@ -565,7 +589,7 @@ export const movixxxProject = {
       id: "responsive",
       index: "05",
       title: "Responsive Results",
-      description: "Built responsive and sortable movie-result UI.",
+      description: "Built responsive and sortable movie result UI.",
     },
   ],
   searchFlow: [
@@ -605,7 +629,7 @@ export const movixxxProject = {
     summary:
       "Context API manages shared watchlist state while the application is running. localStorage persists that watchlist in the browser so it can be restored in a later session.",
     persistenceNote:
-      "This is local browser persistence, not account, cloud, or cross-device sync.",
+      "Local browser persistence only. No account sync or cross device sync.",
     persistFlow: [
       { id: "add", index: "01", label: "User adds movie" },
       { id: "context", index: "02", label: "Context API" },
@@ -634,13 +658,13 @@ export const movixxxProject = {
   },
   loading: {
     summary:
-      "Loading states provide immediate feedback while movie data is being fetched, improving the perceived responsiveness of the interface.",
+      "Loading states provide immediate interface feedback while OMDb data is being fetched.",
     status: "searching...",
     detail: "Fetching movie results",
   },
   responsive: {
     summary:
-      "The result interface adapts across viewport sizes, remains usable on smaller screens, and supports a sortable result list alongside loading feedback.",
+      "The result interface stays usable across viewport sizes, with sortable results and loading feedback.",
     points: [
       "Responsive layout across viewport sizes",
       "Sortable result interface",
@@ -681,8 +705,7 @@ export const movixxxProject = {
       problem:
         "Searching on every keystroke can generate unnecessary network requests.",
       approach: "Delay request execution until typing pauses.",
-      outcome:
-        "Approximately 40% reduction in redundant API requests.",
+      outcome: "~40% fewer redundant API calls.",
     },
     {
       id: "context",
@@ -713,7 +736,7 @@ export const movixxxProject = {
       problem: "API requests can take longer on slower connections.",
       approach: "Render loading states while waiting for data.",
       outcome:
-        "Users get immediate visual feedback and a more responsive-feeling interface.",
+        "Users get immediate visual feedback and a more responsive feeling interface.",
     },
   ],
   demonstratesIntro:
@@ -770,17 +793,23 @@ export const styliqueProject = {
   kicker: "Frontend Architecture Project",
   index: 3,
   total: PROJECT_COUNT,
-  subtitle: "E-commerce Website",
-  type: "E-commerce Website",
+  subtitle: "Ecommerce Website",
+  type: "Ecommerce Website",
   role: "Frontend Architecture",
   summary:
-    "Stylique is a React-based e-commerce interface built around reusable components, shared cart and wishlist state, persistent browser storage, and client-side routing across more than ten application views.",
+    "Stylique is a React based ecommerce interface built around reusable components, shared cart and wishlist state, persistent browser storage, and client side routing across more than ten application views.",
   stackLabel: "React + React Router + Context API",
   introStack: ["React", "React Router", "Context API"],
+  links: {
+    live: "https://stylique-e-commerce-website.vercel.app/",
+    github: "https://github.com/Maryam-Amir00/Stylique_E-Commerce_Website",
+    youtube: "https://youtu.be/0h4wDwCki58?si=bpIuARkY4uPaSp5w",
+  },
+  demoIntro: "A walkthrough of Stylique browsing, cart, and wishlist flows.",
   intro: {
     name: "Stylique",
-    type: "E-commerce Website",
-    architecture: "multi-view React application",
+    type: "Ecommerce Website",
+    architecture: "multi view React application",
   },
   metadata: [
     { id: "focus", label: "Focus", value: "Frontend Architecture" },
@@ -816,16 +845,16 @@ export const styliqueProject = {
   },
   routing: {
     summary:
-      "As the storefront expanded beyond a single screen, route organization became part of the application architecture. React Router was used to structure navigation across 10+ views while keeping the experience within a single-page React application.",
+      "React Router organizes storefront navigation inside a shared layout, grouping product discovery, product interaction, cart, and wishlist.",
     metricValue: "10+",
-    metricLabel: "client-side routed views",
+    metricLabel: "client side routed views",
     metricContext: "structured with React Router",
     areas: [
       { id: "discovery", label: "product discovery", detail: "catalog browsing" },
       {
         id: "interaction",
         label: "product interaction",
-        detail: "item-level views",
+        detail: "item level views",
       },
       { id: "cart", label: "cart experience", detail: "shopping selections" },
       {
@@ -835,7 +864,7 @@ export const styliqueProject = {
       },
     ],
     areasDescription:
-      "Client-side navigation is organized around product discovery, product interaction, cart experience, and wishlist experience across 10+ application views.",
+      "Client side navigation is organized around product discovery, product interaction, cart experience, and wishlist experience across 10+ application views.",
   },
   shoppingState: {
     summary:
@@ -853,6 +882,7 @@ export const styliqueProject = {
   persistence: {
     summary:
       "Persistent browser storage keeps cart and wishlist selections available between sessions so shopping can continue after the page or session ends.",
+    note: "Browser persistence only. No account or cloud sync.",
     sharedRole:
       "Keeps cart and wishlist consistent while navigating through the application.",
     persistedRole:
@@ -873,7 +903,7 @@ export const styliqueProject = {
   },
   reuse: {
     summary:
-      "Reusable UI components were created across the storefront, especially where product-related interfaces repeated similar visual patterns. This reduced duplicate styling code across product pages.",
+      "Reusable UI components were created across the storefront, especially where product related interfaces repeated similar visual patterns. This reduced duplicate styling code across product pages.",
     note: "Reusable components make repeated UI patterns easier to maintain and help keep styling behavior consistent across related views.",
     without: [
       "Product View A → custom product UI",
@@ -889,9 +919,9 @@ export const styliqueProject = {
     summary:
       "The storefront was structured so product browsing and shopping interactions remain usable on narrow screens before expanding into wider desktop layouts.",
     description:
-      "Layout grows from a single-column mobile flow, through an expanded tablet composition, into a wider desktop application layout.",
+      "Layout grows from a single column mobile flow, through an expanded tablet composition, into a wider desktop application layout.",
     stages: [
-      { id: "mobile", label: "Mobile", detail: "single-column flow" },
+      { id: "mobile", label: "Mobile", detail: "single column flow" },
       { id: "tablet", label: "Tablet", detail: "expanded product layout" },
       {
         id: "desktop",
@@ -930,21 +960,22 @@ export const styliqueProject = {
     {
       id: "routing",
       index: "01",
-      title: "Multi-View Routing",
+      title: "Multi View Routing",
       description:
-        "Structured client-side navigation across 10+ application views using React Router.",
+        "Structured client side navigation across 10+ application views using React Router.",
     },
     {
       id: "state",
       index: "02",
-      title: "Cart & Wishlist State",
-      description: "Managed shared shopping state with Context API.",
+      title: "Cart and Wishlist State",
+      description: "Managed shared shopping state using Context API.",
     },
     {
       id: "persistence",
       index: "03",
       title: "Persistent Shopping Sessions",
-      description: "Persisted cart and wishlist selections across sessions.",
+      description:
+        "Preserved cart and wishlist data through browser storage.",
     },
     {
       id: "reuse",
@@ -956,7 +987,7 @@ export const styliqueProject = {
     {
       id: "mobile",
       index: "05",
-      title: "Mobile-First Design",
+      title: "Mobile First Design",
       description:
         "Designed responsive product interfaces with smaller screens as a primary layout constraint.",
     },
@@ -968,17 +999,17 @@ export const styliqueProject = {
       key: "architecture_decision_01",
       title: "React Router for Application Structure",
       problem:
-        "A storefront spanning many views needs predictable client-side navigation.",
+        "A storefront spanning many views needs predictable client side navigation.",
       approach:
         "Use React Router to organize navigation across 10+ application views.",
       outcome:
-        "Keeps multi-view navigation structured inside the React application.",
+        "Keeps multi view navigation structured inside the React application.",
     },
     {
       id: "context",
       index: "02",
       key: "architecture_decision_02",
-      title: "Context API for Shared Cart/Wishlist State",
+      title: "Context API for Shared Cart and Wishlist State",
       problem: "Cart and wishlist selections affect multiple parts of the UI.",
       approach:
         "Use Context API so relevant views and components can access consistent shopping state.",
@@ -990,7 +1021,7 @@ export const styliqueProject = {
       index: "03",
       key: "architecture_decision_03",
       title: "Persistent Storage",
-      problem: "In-memory React state disappears between sessions.",
+      problem: "In memory React state disappears between sessions.",
       approach:
         "Persist shopping selections with persistent browser storage.",
       outcome:
@@ -1011,7 +1042,7 @@ export const styliqueProject = {
       id: "mobile",
       index: "05",
       key: "architecture_decision_05",
-      title: "Mobile-First Layout",
+      title: "Mobile First Layout",
       problem:
         "Commerce interfaces contain dense information that can become difficult to use on narrow screens.",
       approach:
@@ -1033,7 +1064,7 @@ export const styliqueProject = {
       title: "Routing at Larger View Count",
       challenge:
         "As the UI expands beyond a handful of screens, navigation structure needs clear organization.",
-      approach: "React Router across 10+ client-side views.",
+      approach: "React Router across 10+ client side views.",
     },
     {
       id: "repeated-ui",
@@ -1047,7 +1078,7 @@ export const styliqueProject = {
       title: "Responsive Commerce Layout",
       challenge:
         "Dense product interfaces must remain usable on narrow viewports.",
-      approach: "Mobile-first layout that expands for wider screens.",
+      approach: "Mobile first layout that expands for wider screens.",
     },
   ],
   stackGroups: [
@@ -1056,19 +1087,20 @@ export const styliqueProject = {
     { id: "state", label: "Shared State", value: "Context API" },
     { id: "persistence", label: "Persistence", value: "Browser Storage" },
     { id: "data", label: "Product Data", value: "Fake Store API" },
+    { id: "layout", label: "Layout", value: "Mobile First responsive design" },
   ],
   demonstratesIntro:
-    "Stylique shows how a multi-view React storefront can organize routing, shared shopping state, browser persistence, reusable UI, and external product data without a custom backend.",
+    "Stylique shows how a multi view React storefront can organize routing, shared shopping state, browser persistence, reusable UI, and external product data without a custom backend.",
   demonstrates: [
     {
       id: "architecture",
       label: "Application Structure",
-      value: "Multi-view React architecture",
+      value: "Multi view React architecture",
     },
     {
       id: "routing",
-      label: "Navigation",
-      value: "Client-side routing across 10+ views",
+      label: "Routing",
+      value: "Client side routing across 10+ views",
     },
     {
       id: "state",
@@ -1093,7 +1125,7 @@ export const styliqueProject = {
     {
       id: "mobile",
       label: "Layout",
-      value: "Mobile-first responsive design",
+      value: "Mobile first responsive design",
     },
   ],
   next: {
@@ -1128,4 +1160,12 @@ export function formatProjectIndex(project: PortfolioProject) {
   const current = String(project.index).padStart(2, "0")
   const total = String(project.total).padStart(2, "0")
   return `${current} / ${total}`
+}
+
+export function resolveProjectLinks(project: PortfolioProject): ProjectLinks {
+  return {
+    live: project.links?.live || project.liveUrl,
+    github: project.links?.github || project.githubUrl,
+    youtube: project.links?.youtube || project.youtubeUrl,
+  }
 }

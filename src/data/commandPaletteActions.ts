@@ -102,13 +102,15 @@ export function getCommandPaletteActions(state: {
       "Open Experience",
       "file",
       "experience",
-      ["experience", "work", "job", "employment"],
+      ["experience", "work", "job", "employment", "intern"],
     ),
     fileAction(PALETTE_ACTION_IDS.skills, FILE_SKILLS, "Open Skills", "file", "skills", [
       "skills",
       "stack",
       "technology",
       "tech",
+      "javascript",
+      "typescript",
     ]),
     fileAction(
       PALETTE_ACTION_IDS.contact,
@@ -200,7 +202,7 @@ export function getCommandPaletteActions(state: {
       label: state.sourceControlVisible
         ? "Focus Source Control"
         : "Open Source Control",
-      description: "Git-inspired portfolio history",
+      description: "Git inspired portfolio history",
       category: "workspace",
       keywords: [
         "source",

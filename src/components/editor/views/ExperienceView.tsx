@@ -26,8 +26,6 @@ export function ExperienceView() {
         <ImpactSummary />
         <Highlights />
         <Workflow />
-        <Stack />
-        <EngineeringNote />
         <NextActions />
       </article>
     </div>
@@ -42,7 +40,7 @@ function RoleCodeIntro({ entry }: { entry: ExperienceEntry }) {
     >
       <code>
         <span className="text-syntax-keyword">export const</span>
-        {" currentRole = {\n"}
+        {" role = {\n"}
         {"  "}
         <span className="text-syntax-property">position</span>
         {": "}
@@ -85,9 +83,11 @@ function RoleHeader() {
             className="size-1.5 shrink-0 rounded-full bg-accent"
           />
         ) : null}
-        {experience.employmentStatus === "current" ? "Current Role" : "Previous Role"}
+        {experience.employmentStatus === "current"
+          ? "Current Role"
+          : "Professional Experience"}
       </p>
-      <h1 className="mt-3 text-[clamp(1.75rem,3.4vw,2.35rem)] leading-tight font-semibold tracking-tight text-fg">
+      <h1 className="mt-3 text-[clamp(1.75rem,3.4vw,2.35rem)] leading-tight font-semibold tracking-tight break-words text-fg">
         {experience.role}
       </h1>
       <p className="mt-2 text-[1.05rem] text-fg-secondary">{experience.company}</p>
@@ -152,12 +152,16 @@ function Highlights() {
           {"// engineering highlights"}
         </span>
       </h2>
-      <ol className="relative mt-5 ml-0 border-l border-subtle pl-4 md:ml-2 md:pl-6">
+      <ol className="relative mt-5 ml-0 md:ml-2">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 left-0 w-px -translate-x-1/2 bg-subtle"
+        />
         {experience.highlights.map((highlight) => (
-          <li key={highlight.id} className="relative pb-8 last:pb-0">
+          <li key={highlight.id} className="relative pb-8 pl-4 last:pb-0 md:pl-6">
             <span
               aria-hidden="true"
-              className="absolute top-1.5 -left-[1.05rem] size-2 rounded-full border border-accent bg-editor md:-left-[1.55rem]"
+              className="absolute top-1.5 left-0 size-2 -translate-x-1/2 rounded-full border border-accent bg-editor"
             />
             <p className="font-mono text-[12px] text-fg-muted">
               {highlight.index}
@@ -165,7 +169,7 @@ function Highlights() {
             <h3 className="mt-1 text-[1.02rem] font-medium text-fg">
               {highlight.title}
             </h3>
-            <p className="mt-2 max-w-[46rem] text-[15px] leading-[1.7] text-fg-secondary">
+            <p className="mt-2 max-w-[52rem] text-[15px] leading-[1.7] text-fg-secondary">
               {highlight.description}
             </p>
             <ul className="mt-3 flex flex-wrap gap-1.5">
@@ -210,33 +214,6 @@ function Workflow() {
         ))}
       </dl>
     </section>
-  )
-}
-
-function Stack() {
-  return (
-    <section className="mt-8">
-      <h2 className="sr-only">Technologies used in this role</h2>
-      <ul className="flex max-w-[46rem] flex-wrap gap-1.5">
-        {experience.stack.map((item) => (
-          <li
-            key={item}
-            className="rounded-[3px] border border-subtle px-2 py-1 font-mono text-[12px] text-fg-secondary"
-          >
-            {item}
-          </li>
-        ))}
-      </ul>
-    </section>
-  )
-}
-
-function EngineeringNote() {
-  return (
-    <p className="mt-8 max-w-[46rem] font-mono text-[13px] leading-6 text-syntax-comment">
-      {"// "}
-      {experience.note}
-    </p>
   )
 }
 

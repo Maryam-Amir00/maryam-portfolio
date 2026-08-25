@@ -12,11 +12,16 @@ export const contactCopy = {
   kicker: "Contact",
   heading: "Let's connect.",
   intro:
-    "Have a project, development opportunity, or engineering role you'd like to discuss? Send a message through the form, or email me directly.",
+    "Have a project, development opportunity, or engineering role to discuss? You can reach me directly or compose a message below.",
   composeNote:
-    "This will open your default email app with the message pre-filled.",
-  privacyNote:
-    "Nothing is submitted to this website. Your message is passed to your email app.",
+    "Your email app will open with this message ready to send. Nothing is sent or stored by this website.",
+  channelsComment: "// direct channels",
+  composeComment: "// compose message",
+  linkedinAction: "LinkedIn Profile",
+  githubAction: "GitHub Profile",
+  copyEmail: "Copy Email",
+  copyPhone: "Copy Phone",
+  copied: "Copied",
   placeholders: {
     name: "Your name",
     email: "you@example.com",

@@ -11,6 +11,9 @@ import { useWorkspace } from "../../../hooks/useWorkspace"
 import { EditorBreadcrumbs } from "../EditorBreadcrumbs"
 
 export function SkillsView() {
+  const pairedGroups = skillGroups.filter((group) => group.key !== "deployment")
+  const deployment = skillGroups.find((group) => group.key === "deployment")
+
   return (
     <div className="flex min-h-full min-w-0 flex-col overflow-x-hidden">
       <EditorBreadcrumbs
@@ -19,19 +22,16 @@ export function SkillsView() {
           { label: "skills.json", current: true },
         ]}
       />
-      <article className="mr-auto min-w-0 w-full max-w-[64rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
+      <article className="mr-auto min-w-0 w-full max-w-[68rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
         <JsonIntro />
         <Header />
         <PrimaryStack />
-        <div className="mt-2 grid min-w-0 gap-x-10 gap-y-2 min-[960px]:grid-cols-2">
-          {skillGroups.map((group) => (
+        <div className="mt-2 grid min-w-0 gap-x-16 gap-y-2 xl:grid-cols-2">
+          {pairedGroups.map((group) => (
             <SkillCategory key={group.id} group={group} />
           ))}
         </div>
-        <p className="mt-8 font-mono text-[13px] leading-6 text-syntax-comment">
-          {"// "}
-          {skillsIntro.note}
-        </p>
+        {deployment ? <SkillCategory group={deployment} layout="wide" /> : null}
         <NextActions />
       </article>
     </div>
@@ -110,7 +110,7 @@ function PrimaryStack() {
         {primaryStack.map((skill, index) => (
           <li
             key={skill.id}
-            className="grid gap-1 py-3.5 min-[640px]:grid-cols-[2.25rem_minmax(0,16rem)_minmax(0,1fr)] min-[640px]:items-baseline min-[640px]:gap-4"
+            className="grid gap-1 py-3.5 min-[640px]:grid-cols-[2.25rem_minmax(12rem,22rem)_minmax(0,1fr)] min-[640px]:items-baseline min-[640px]:gap-6"
           >
             <span
               aria-hidden="true"
@@ -142,7 +142,13 @@ const SKILL_GROUP_HEADINGS: Record<string, string> = {
   deployment: "Deployment",
 }
 
-function SkillCategory({ group }: { group: SkillGroup }) {
+function SkillCategory({
+  group,
+  layout = "default",
+}: {
+  group: SkillGroup
+  layout?: "default" | "wide"
+}) {
   return (
     <section className="min-w-0 pt-6">
       <h2 className="font-mono text-[13px]">
@@ -155,7 +161,13 @@ function SkillCategory({ group }: { group: SkillGroup }) {
           <Punct>": [</Punct>
         </span>
       </h2>
-      <ul className="mt-2">
+      <ul
+        className={
+          layout === "wide"
+            ? "mt-2 grid min-w-0 gap-x-10 gap-y-1 min-[720px]:grid-cols-3"
+            : "mt-2"
+        }
+      >
         {group.skills.map((skill) => (
           <SkillRow key={skill.id} skill={skill} />
         ))}
@@ -169,15 +181,15 @@ function SkillCategory({ group }: { group: SkillGroup }) {
 
 function SkillRow({ skill }: { skill: Skill }) {
   return (
-    <li className="grid min-w-0 gap-0.5 py-1.5 min-[640px]:grid-cols-[minmax(0,15.5rem)_minmax(0,1fr)] min-[640px]:items-baseline min-[640px]:gap-4">
-      <span className="min-w-0 font-mono text-[13px] break-words text-syntax-string">
+    <li className="min-w-0 py-2">
+      <span className="block min-w-0 font-mono text-[12px] leading-5 text-syntax-comment">
+        <span aria-hidden="true">{"// "}</span>
+        {skill.context}
+      </span>
+      <span className="mt-0.5 block min-w-0 font-mono text-[13px] break-words text-syntax-string">
         <Punct>"</Punct>
         {skill.name}
         <Punct>"</Punct>
-      </span>
-      <span className="min-w-0 font-mono text-[12px] leading-5 text-syntax-comment">
-        <span aria-hidden="true">{"// "}</span>
-        {skill.context}
       </span>
     </li>
   )

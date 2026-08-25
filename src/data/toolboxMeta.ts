@@ -60,15 +60,15 @@ export type ToolboxCategory = {
 const toolboxMeta: Record<ToolboxSkillId, ToolboxSkillMeta> = {
   react: {
     marker: "Rx",
-    description: "Component-driven frontend applications",
+    description: "Component driven frontend applications",
     keywords: ["frontend", "components", "ui", "interface"],
     evidenceFileIds: [FILE_EXPERIENCE, FILE_STUDYSYNC, FILE_MOVIXXX],
   },
   typescript: {
     marker: "TS",
-    description: "Typed application development",
-    keywords: ["typed", "types"],
-    evidenceFileIds: [],
+    description: "Typed JavaScript development",
+    keywords: ["typed", "types", "typescript"],
+    evidenceFileIds: [FILE_STUDYSYNC],
   },
   drf: {
     marker: "DJ",
@@ -84,9 +84,9 @@ const toolboxMeta: Record<ToolboxSkillId, ToolboxSkillMeta> = {
   },
   javascript: {
     marker: "JS",
-    description: "Frontend application logic",
-    keywords: ["frontend", "logic"],
-    evidenceFileIds: [],
+    description: "Frontend application logic and development",
+    keywords: ["frontend", "logic", "javascript", "js"],
+    evidenceFileIds: [FILE_MOVIXXX, FILE_STYLIQUE],
   },
   tailwind: {
     marker: "TW",
@@ -96,13 +96,13 @@ const toolboxMeta: Record<ToolboxSkillId, ToolboxSkillMeta> = {
   },
   "tanstack-query": {
     marker: "TQ",
-    description: "Server-state and data fetching",
+    description: "Server state and data fetching",
     keywords: ["state", "server", "fetching", "query"],
     evidenceFileIds: [FILE_EXPERIENCE, FILE_STUDYSYNC],
   },
   "tanstack-router": {
     marker: "TR",
-    description: "Type-safe client-side routing",
+    description: "Type safe client side routing",
     keywords: ["routing", "router", "navigation"],
     evidenceFileIds: [FILE_STUDYSYNC],
   },
@@ -223,7 +223,7 @@ const CATEGORY_DEFS = [
     id: "core-stack",
     heading: "Core Stack",
     categoryTerms: ["core", "core stack", "stack"],
-    skillIds: ["react", "typescript", "drf", "postgresql"] as const,
+    skillIds: ["react", "javascript", "drf", "postgresql"] as const,
     isCore: true,
   },
   {
@@ -231,7 +231,7 @@ const CATEGORY_DEFS = [
     heading: "Frontend",
     categoryTerms: ["frontend"],
     skillIds: [
-      "javascript",
+      "typescript",
       "tailwind",
       "tanstack-query",
       "tanstack-router",

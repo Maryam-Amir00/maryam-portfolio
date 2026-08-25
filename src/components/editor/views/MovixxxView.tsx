@@ -7,13 +7,20 @@ import {
   type FlowStage,
 } from "../../../data/projectsData"
 import { EngineeringDecisionList } from "../../projects/EngineeringDecisionList"
+import { ProjectDemo } from "../../projects/ProjectDemo"
+import {
+  MOVIXXX_DEMO_SECTION_ID,
+  ProjectExternalActions,
+} from "../../projects/ProjectExternalActions"
 import { ProjectMeta } from "../../projects/ProjectMeta"
 import { ProjectNavigation } from "../../projects/ProjectNavigation"
 import { ProjectSectionHeading } from "../../projects/ProjectSectionHeading"
+import { getSafeProjectLinks } from "../../projects/projectLinks"
 import { EditorBreadcrumbs } from "../EditorBreadcrumbs"
 import { accessibleMetricValue } from "../../../utils/accessibleMetric"
 
 const project = movixxxProject
+const links = getSafeProjectLinks(project)
 
 export function MovixxxView() {
   return (
@@ -25,19 +32,51 @@ export function MovixxxView() {
           { label: project.fileName, current: true },
         ]}
       />
-      <article className="mr-auto min-w-0 w-full max-w-[68rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
-        <CodeIntro />
-        <Header />
-        <ProjectMeta items={project.metadata} />
-        <SearchFlowSection />
-        <WatchlistSection />
-        <LoadingSection />
-        <ResponsiveSection />
-        <HighlightsSection />
-        <DataConcernsSection />
-        <DecisionsSection />
-        <StackSection />
-        <DemonstratesSection />
+      <article className="mr-auto min-w-0 w-full max-w-[64rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
+        <div className="border-b border-subtle pb-10 md:pb-12">
+          <CodeIntro />
+          <Header />
+          <ProjectMeta items={project.metadata} emphasizeValues />
+          {links.youtube && project.demoIntro ? (
+            <ProjectDemo
+              intro={project.demoIntro}
+              youtubeUrl={links.youtube}
+              videoId={links.videoId}
+              iframeTitle="Movixxx project demo"
+              sectionId={MOVIXXX_DEMO_SECTION_ID}
+              maxWidthClass="max-w-[52rem]"
+              headingProminence="default"
+            />
+          ) : null}
+        </div>
+
+        <div className="border-b border-subtle py-10 md:py-14">
+          <SearchFlowSection />
+          <WatchlistSection />
+        </div>
+
+        <div className="border-b border-subtle py-10 md:py-14">
+          <LoadingSection />
+          <ResponsiveSection />
+          <HighlightsSection />
+        </div>
+
+        <div className="border-b border-subtle py-10 md:py-14">
+          <DataConcernsSection />
+          <DecisionsSection />
+        </div>
+
+        <div className="py-10 md:py-14">
+          <StackSection />
+          <DemonstratesSection />
+          <div className="mt-10 md:mt-12">
+            <ProjectExternalActions
+              project={project}
+              demoSectionId={MOVIXXX_DEMO_SECTION_ID}
+            />
+          </div>
+        </div>
+
         <ProjectNavigation next={project.next} back={project.back} />
       </article>
     </div>
@@ -100,6 +139,12 @@ function Header() {
       <p className="mt-5 max-w-[42rem] text-[15px] leading-[1.7] text-fg-secondary">
         {project.summary}
       </p>
+      <div className="mt-5">
+        <ProjectExternalActions
+          project={project}
+          demoSectionId={MOVIXXX_DEMO_SECTION_ID}
+        />
+      </div>
     </header>
   )
 }
@@ -120,26 +165,26 @@ function EventPipeline({
       >
         {stages.map((stage, index) => (
           <Fragment key={stage.id}>
-            <li className="min-w-0 flex-1 border-l border-subtle py-1 pl-3 min-[880px]:border-t min-[880px]:border-l-0 min-[880px]:px-0 min-[880px]:pt-3 min-[880px]:pb-0">
+            <li className="min-w-0 flex-1 border-l border-subtle py-2 pl-3 min-[880px]:border-t min-[880px]:border-l-0 min-[880px]:px-0 min-[880px]:pt-3 min-[880px]:pb-0">
               <p className="font-mono text-[11px] text-fg-muted">{stage.index}</p>
-              <p className="mt-1 font-mono text-[11px] tracking-[0.12em] text-syntax-property uppercase">
+              <p className="mt-1.5 font-mono text-[12px] font-medium tracking-[0.12em] text-fg uppercase">
                 {stage.label}
               </p>
               {stage.detail ? (
-                <p className="mt-1 text-[13px] leading-5 break-words text-fg-secondary">
+                <p className="mt-1.5 text-[13px] leading-5 break-words text-fg-secondary">
                   {stage.detail}
                 </p>
               ) : null}
             </li>
             {index < stages.length - 1 ? (
-              <li className="flex shrink-0 items-center px-0 py-1 pl-3 min-[880px]:px-2 min-[880px]:py-0 min-[880px]:pl-0">
+              <li className="flex shrink-0 items-center px-0 py-2 pl-3 min-[880px]:px-2.5 min-[880px]:py-0 min-[880px]:pl-0">
                 <ArrowDown
-                  size={14}
+                  size={16}
                   strokeWidth={1.75}
                   className="text-fg-muted min-[880px]:hidden"
                 />
                 <ArrowRight
-                  size={14}
+                  size={16}
                   strokeWidth={1.75}
                   className="hidden text-fg-muted min-[880px]:block"
                 />
@@ -154,7 +199,7 @@ function EventPipeline({
 
 function SearchFlowSection() {
   return (
-    <section className="mt-10">
+    <section>
       <ProjectSectionHeading comment="debounced search flow">
         Search Request Flow
       </ProjectSectionHeading>
@@ -162,28 +207,24 @@ function SearchFlowSection() {
         stages={project.searchFlow}
         description={project.searchFlowDescription}
       />
-      <div className="mt-8 grid gap-6 min-[800px]:grid-cols-[minmax(0,1fr)_auto] min-[800px]:items-start">
-        <p className="max-w-[42rem] text-[15px] leading-[1.7] text-fg-secondary">
-          {project.debounceExplanation}
-        </p>
-        <div className="min-w-0 border-l border-subtle pl-4 min-[800px]:max-w-[16rem]">
-          <p className="text-[1.75rem] leading-none font-semibold tracking-tight text-fg">
-            <span className="sr-only">
-              {accessibleMetricValue(project.metric.value)} {project.metric.label},{" "}
-              {project.metric.context}
-            </span>
-            <span aria-hidden="true">{project.metric.value}</span>
-          </p>
-          <p className="mt-2 text-[13px] leading-5 text-fg-secondary" aria-hidden="true">
-            {project.metric.label}
-          </p>
-          <p className="mt-1 font-mono text-[12px] text-fg-muted" aria-hidden="true">
+      <div className="mt-6 border-l border-subtle pl-4">
+        <p className="font-mono text-[12px] text-fg-muted">Debounced requests</p>
+        <p className="mt-1.5 text-[1.75rem] leading-none font-semibold tracking-tight text-fg">
+          <span className="sr-only">
+            {accessibleMetricValue(project.metric.value)} {project.metric.label},{" "}
             {project.metric.context}
-          </p>
-        </div>
+          </span>
+          <span aria-hidden="true">{project.metric.value}</span>
+        </p>
+        <p className="mt-2 text-[13px] leading-5 text-fg-secondary" aria-hidden="true">
+          {project.metric.label}
+        </p>
       </div>
+      <p className="mt-6 max-w-[42rem] text-[15px] leading-[1.7] text-fg-secondary">
+        {project.debounceExplanation}
+      </p>
       <p className="sr-only">{project.debounceComparison.description}</p>
-      <div className="mt-8 grid gap-8 min-[800px]:grid-cols-2">
+      <div className="mt-8 grid gap-8 min-[800px]:grid-cols-2 min-[800px]:gap-x-12">
         <ComparisonColumn column={project.debounceComparison.without} showRequest />
         <ComparisonColumn column={project.debounceComparison.with} />
       </div>
@@ -199,7 +240,7 @@ function ComparisonColumn({
   showRequest?: boolean
 }) {
   return (
-    <div aria-hidden="true" className="min-w-0">
+    <div aria-hidden="true" className="min-w-0 border-t border-subtle pt-4">
       <p className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">
         {column.label}
       </p>
@@ -226,7 +267,7 @@ function ComparisonColumn({
 
 function WatchlistSection() {
   return (
-    <section className="mt-10">
+    <section className="mt-10 md:mt-14">
       <ProjectSectionHeading comment="persistent watchlist">
         Persistent Watchlist
       </ProjectSectionHeading>
@@ -240,7 +281,7 @@ function WatchlistSection() {
       <p className="sr-only">{project.watchlist.flowDescription}</p>
       <div
         aria-hidden="true"
-        className="mt-6 grid gap-8 min-[800px]:grid-cols-2"
+        className="mt-6 grid gap-8 min-[800px]:grid-cols-2 min-[800px]:gap-x-12"
       >
         <FlowList
           heading="this session"
@@ -251,13 +292,13 @@ function WatchlistSection() {
           stages={project.watchlist.restoreFlow}
         />
       </div>
-      <dl className="mt-8 grid gap-5 min-[800px]:grid-cols-2">
+      <dl className="mt-8 grid gap-5 min-[800px]:grid-cols-2 min-[800px]:gap-x-12">
         {project.watchlist.roles.map((item) => (
           <div key={item.id} className="min-w-0 border-t border-subtle pt-3">
             <dt className="font-mono text-[13px] text-syntax-property">
               {item.name}
             </dt>
-            <dd className="mt-1.5 max-w-[28rem] text-[14px] leading-6 text-fg-secondary">
+            <dd className="mt-1 max-w-[28rem] text-[14px] leading-6 text-fg-secondary">
               {item.role}
             </dd>
           </div>
@@ -276,7 +317,7 @@ function FlowList({
 }) {
   return (
     <div className="min-w-0">
-      <p className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">
+      <p className="font-mono text-[11px] font-medium tracking-[0.12em] text-fg uppercase">
         {heading}
       </p>
       <ol className="mt-3">
@@ -301,9 +342,9 @@ function FlowList({
 
 function LoadingSection() {
   return (
-    <section className="mt-10">
+    <section>
       <ProjectSectionHeading comment="loading states">
-        Loading & Feedback States
+        Loading and Feedback States
       </ProjectSectionHeading>
       <p className="max-w-[42rem] text-[15px] leading-[1.7] text-fg-secondary">
         {project.loading.summary}
@@ -328,7 +369,7 @@ function LoadingSection() {
 
 function ResponsiveSection() {
   return (
-    <section className="mt-10">
+    <section className="mt-10 md:mt-14">
       <ProjectSectionHeading comment="result experience">
         Responsive Result Experience
       </ProjectSectionHeading>
@@ -351,7 +392,7 @@ function ResponsiveSection() {
 
 function HighlightsSection() {
   return (
-    <section className="mt-10">
+    <section className="mt-10 md:mt-14">
       <ProjectSectionHeading comment="engineering highlights">
         Engineering Highlights
       </ProjectSectionHeading>
@@ -419,16 +460,16 @@ function InlineFlow({
 
 function DataConcernsSection() {
   return (
-    <section className="mt-10">
+    <section>
       <ProjectSectionHeading comment="data flow">
         Remote Data vs Local State
       </ProjectSectionHeading>
       <p className="max-w-[42rem] text-[15px] leading-[1.7] text-fg-secondary">
         {project.dataNote}
       </p>
-      <div className="mt-6 grid gap-8 min-[880px]:grid-cols-2">
-        <div className="min-w-0">
-          <h3 className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">
+      <div className="mt-6 grid gap-8 min-[880px]:grid-cols-2 min-[880px]:gap-0">
+        <div className="min-w-0 min-[880px]:pr-10">
+          <h3 className="font-mono text-[12px] font-medium tracking-[0.12em] text-fg uppercase">
             Remote / API
           </h3>
           <InlineFlow
@@ -436,9 +477,9 @@ function DataConcernsSection() {
             description={project.searchDataFlowDescription}
           />
         </div>
-        <div className="min-w-0">
-          <h3 className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">
-            Local / persistent
+        <div className="min-w-0 border-t border-subtle pt-6 min-[880px]:border-t-0 min-[880px]:border-l min-[880px]:pt-0 min-[880px]:pl-10">
+          <h3 className="font-mono text-[12px] font-medium tracking-[0.12em] text-fg uppercase">
+            Local / Persistent
           </h3>
           <InlineFlow
             stages={project.watchlistDataFlow}
@@ -452,13 +493,14 @@ function DataConcernsSection() {
 
 function DecisionsSection() {
   return (
-    <section className="mt-10">
+    <section className="mt-10 md:mt-14">
       <ProjectSectionHeading comment="engineering decisions">
         Engineering Decisions
       </ProjectSectionHeading>
       <EngineeringDecisionList
         decisions={project.engineeringDecisions}
         outcomeLabel="impact"
+        stackUntilWide
       />
     </section>
   )
@@ -466,7 +508,7 @@ function DecisionsSection() {
 
 function StackSection() {
   return (
-    <section className="mt-10">
+    <section>
       <ProjectSectionHeading comment="stack">
         Project Stack
       </ProjectSectionHeading>
@@ -476,7 +518,7 @@ function StackSection() {
             <dt className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">
               {item.label}
             </dt>
-            <dd className="mt-1.5 text-[13px] text-fg-secondary">{item.value}</dd>
+            <dd className="mt-1.5 text-[13px] text-fg">{item.value}</dd>
           </div>
         ))}
       </dl>
@@ -486,7 +528,7 @@ function StackSection() {
 
 function DemonstratesSection() {
   return (
-    <section className="mt-10">
+    <section className="mt-10 md:mt-14">
       <ProjectSectionHeading comment="coverage">
         What This Project Demonstrates
       </ProjectSectionHeading>

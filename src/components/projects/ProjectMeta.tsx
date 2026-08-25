@@ -1,6 +1,12 @@
 import type { ProjectMetaItem } from "../../data/projectsData"
 
-export function ProjectMeta({ items }: { items: readonly ProjectMetaItem[] }) {
+export function ProjectMeta({
+  items,
+  emphasizeValues = false,
+}: {
+  items: readonly ProjectMetaItem[]
+  emphasizeValues?: boolean
+}) {
   return (
     <section aria-label="Project metadata" className="mt-8 border-y border-subtle">
       <dl className="grid grid-cols-1 min-[720px]:grid-cols-2 min-[1080px]:grid-cols-4">
@@ -12,7 +18,15 @@ export function ProjectMeta({ items }: { items: readonly ProjectMetaItem[] }) {
             <dt className="font-mono text-[11px] tracking-[0.14em] text-fg-muted uppercase">
               {item.label}
             </dt>
-            <dd className="mt-1.5 text-[13px] text-fg-secondary">{item.value}</dd>
+            <dd
+              className={
+                emphasizeValues
+                  ? "mt-1.5 text-[13px] text-fg"
+                  : "mt-1.5 text-[13px] text-fg-secondary"
+              }
+            >
+              {item.value}
+            </dd>
           </div>
         ))}
       </dl>

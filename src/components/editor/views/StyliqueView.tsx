@@ -7,13 +7,20 @@ import {
   type FlowStage,
 } from "../../../data/projectsData"
 import { EngineeringDecisionList } from "../../projects/EngineeringDecisionList"
+import { ProjectDemo } from "../../projects/ProjectDemo"
+import {
+  ProjectExternalActions,
+  STYLIQUE_DEMO_SECTION_ID,
+} from "../../projects/ProjectExternalActions"
 import { ProjectMeta } from "../../projects/ProjectMeta"
 import { ProjectNavigation } from "../../projects/ProjectNavigation"
 import { ProjectSectionHeading } from "../../projects/ProjectSectionHeading"
+import { getSafeProjectLinks } from "../../projects/projectLinks"
 import { EditorBreadcrumbs } from "../EditorBreadcrumbs"
 import { accessibleMetricValue } from "../../../utils/accessibleMetric"
 
 const project = styliqueProject
+const links = getSafeProjectLinks(project)
 
 export function StyliqueView() {
   return (
@@ -25,23 +32,61 @@ export function StyliqueView() {
           { label: project.fileName, current: true },
         ]}
       />
-      <article className="mr-auto min-w-0 w-full max-w-[68rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
-        <CodeIntro />
-        <Header />
-        <ProjectMeta items={project.metadata} />
-        <ArchitectureSection />
-        <RoutingSection />
-        <ShoppingStateSection />
-        <PersistenceSection />
-        <ReuseSection />
-        <MobileFirstSection />
-        <ProductDataSection />
-        <HighlightsSection />
-        <ApplicationFlowSection />
-        <DecisionsSection />
-        <ChallengesSection />
-        <StackSection />
-        <DemonstratesSection />
+      <article className="mr-auto min-w-0 w-full max-w-[64rem] px-[clamp(1rem,3.5vw,2.5rem)] py-6 md:py-9">
+        <div className="border-b border-subtle pb-10 md:pb-12">
+          <CodeIntro />
+          <Header />
+          <ProjectMeta items={project.metadata} emphasizeValues />
+          {links.youtube && project.demoIntro ? (
+            <ProjectDemo
+              intro={project.demoIntro}
+              youtubeUrl={links.youtube}
+              videoId={links.videoId}
+              iframeTitle="Stylique project demo"
+              sectionId={STYLIQUE_DEMO_SECTION_ID}
+              maxWidthClass="max-w-[52rem]"
+              headingProminence="default"
+            />
+          ) : null}
+        </div>
+
+        <div className="border-b border-subtle py-10 md:py-14">
+          <ArchitectureSection />
+          <RoutingSection />
+        </div>
+
+        <div className="border-b border-subtle py-10 md:py-14">
+          <ShoppingStateSection />
+          <PersistenceSection />
+        </div>
+
+        <div className="border-b border-subtle py-10 md:py-14">
+          <ReuseSection />
+          <MobileFirstSection />
+        </div>
+
+        <div className="border-b border-subtle py-10 md:py-14">
+          <ProductDataSection />
+          <HighlightsSection />
+          <ApplicationFlowSection />
+          <DecisionsSection />
+        </div>
+
+        <div className="border-b border-subtle py-10 md:py-14">
+          <ChallengesSection />
+        </div>
+
+        <div className="py-10 md:py-14">
+          <StackSection />
+          <DemonstratesSection />
+          <div className="mt-10 md:mt-12">
+            <ProjectExternalActions
+              project={project}
+              demoSectionId={STYLIQUE_DEMO_SECTION_ID}
+            />
+          </div>
+        </div>
+
         <ProjectNavigation
           next={project.next}
           back={project.back}
@@ -111,6 +156,12 @@ function Header() {
       <p className="mt-5 max-w-[44rem] text-[15px] leading-[1.7] text-fg-secondary">
         {project.summary}
       </p>
+      <div className="mt-5">
+        <ProjectExternalActions
+          project={project}
+          demoSectionId={STYLIQUE_DEMO_SECTION_ID}
+        />
+      </div>
     </header>
   )
 }
@@ -127,29 +178,17 @@ function StructureTree({
   return (
     <div>
       <p className="sr-only">{description}</p>
-      <div
-        aria-hidden="true"
-        className="flex min-w-0 flex-col gap-3 min-[880px]:flex-row min-[880px]:items-start min-[880px]:gap-6"
-      >
-        <p className="shrink-0 border border-subtle px-3 py-2 font-mono text-[13px] text-fg">
-          {root}
-        </p>
-        <ul className="min-w-0 font-mono text-[13px] leading-7">
+      <div aria-hidden="true" className="min-w-0 font-mono text-[13px] leading-7">
+        <p className="text-fg">{root}</p>
+        <ul className="mt-1">
           {branches.map((branch, index) => (
-            <li
-              key={branch.id}
-              className="min-w-0 break-words text-fg-secondary max-md:border-b max-md:border-subtle max-md:py-2.5 max-md:last:border-b-0 min-[880px]:py-0"
-            >
-              <span className="hidden text-fg-muted md:inline">
+            <li key={branch.id} className="min-w-0 break-words pl-3">
+              <span className="text-fg-muted">
                 {index === branches.length - 1 ? "└─ " : "├─ "}
               </span>
-              <span className="block text-syntax-property md:inline">
-                {branch.label}
-              </span>
-              <span className="hidden text-fg-muted md:inline">{" → "}</span>
-              <span className="block text-syntax-string md:inline">
-                {branch.detail}
-              </span>
+              <span className="text-syntax-property">{branch.label}</span>
+              <span className="text-fg-muted">{" → "}</span>
+              <span className="text-syntax-string">{branch.detail}</span>
             </li>
           ))}
         </ul>
@@ -160,8 +199,8 @@ function StructureTree({
 
 function ArchitectureSection() {
   return (
-    <section className="mt-10">
-      <ProjectSectionHeading comment="application architecture">
+    <section>
+      <ProjectSectionHeading comment="application structure">
         Application Structure
       </ProjectSectionHeading>
       <StructureTree
@@ -175,35 +214,33 @@ function ArchitectureSection() {
 
 function RoutingSection() {
   return (
-    <section className="mt-10">
+    <section className="mt-10 md:mt-14">
       <ProjectSectionHeading comment="routing architecture">
         Routing Architecture
       </ProjectSectionHeading>
-      <div className="grid gap-6 min-[800px]:grid-cols-[auto_minmax(0,1fr)] min-[800px]:items-start">
-        <div className="min-w-0 border-l border-subtle pl-4">
-          <p className="text-[1.75rem] leading-none font-semibold tracking-tight text-fg">
-            <span className="sr-only">
-              {accessibleMetricValue(project.routing.metricValue)}{" "}
-              {project.routing.metricLabel}, {project.routing.metricContext}
-            </span>
-            <span aria-hidden="true">{project.routing.metricValue}</span>
-          </p>
-          <p className="mt-2 text-[13px] leading-5 text-fg-secondary" aria-hidden="true">
-            {project.routing.metricLabel}
-          </p>
-          <p className="mt-1 font-mono text-[12px] text-fg-muted" aria-hidden="true">
-            {project.routing.metricContext}
-          </p>
-        </div>
-        <p className="max-w-[42rem] text-[15px] leading-[1.7] text-fg-secondary">
-          {project.routing.summary}
+      <div className="border-l border-subtle pl-4">
+        <p className="text-[1.75rem] leading-none font-semibold tracking-tight text-fg">
+          <span className="sr-only">
+            {accessibleMetricValue(project.routing.metricValue)}{" "}
+            {project.routing.metricLabel}, {project.routing.metricContext}
+          </span>
+          <span aria-hidden="true">{project.routing.metricValue}</span>
+        </p>
+        <p className="mt-2 text-[13px] leading-5 text-fg-secondary" aria-hidden="true">
+          {project.routing.metricLabel}
+        </p>
+        <p className="mt-1 font-mono text-[12px] text-fg-muted" aria-hidden="true">
+          {project.routing.metricContext}
         </p>
       </div>
+      <p className="mt-5 max-w-[44rem] text-[15px] leading-[1.7] text-fg-secondary">
+        {project.routing.summary}
+      </p>
       <div className="mt-6">
         <p className="sr-only">{project.routing.areasDescription}</p>
         <p
           aria-hidden="true"
-          className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase"
+          className="font-mono text-[11px] font-medium tracking-[0.12em] text-fg uppercase"
         >
           application
         </p>
@@ -212,7 +249,7 @@ function RoutingSection() {
           className="mt-2 font-mono text-[13px] leading-7 text-fg-secondary"
         >
           {project.routing.areas.map((area, index) => (
-            <li key={area.id} className="min-w-0 break-words">
+            <li key={area.id} className="min-w-0 break-words pl-3">
               <span className="text-fg-muted">
                 {index === project.routing.areas.length - 1 ? "└─ " : "├─ "}
               </span>
@@ -230,7 +267,7 @@ function ShoppingStateSection() {
   const branchIndex = flow.findIndex((stage) => stage.id === "state")
 
   return (
-    <section className="mt-10">
+    <section>
       <ProjectSectionHeading comment="shopping state">
         Shared Shopping State
       </ProjectSectionHeading>
@@ -238,7 +275,7 @@ function ShoppingStateSection() {
         {project.shoppingState.summary}
       </p>
       <p className="sr-only">{project.shoppingState.flowDescription}</p>
-      <ol aria-hidden="true" className="mt-6 max-w-[28rem]">
+      <ol aria-hidden="true" className="mt-6 max-w-[32rem]">
         {flow.map((stage, index) => (
           <li key={stage.id} className="min-w-0">
             <p className="font-mono text-[13px] text-fg-secondary">
@@ -254,8 +291,8 @@ function ShoppingStateSection() {
               </ul>
             ) : null}
             {index < flow.length - 1 ? (
-              <p className="py-1 pl-1 text-fg-muted">
-                <ArrowDown size={12} strokeWidth={1.75} />
+              <p className="py-1.5 pl-1 text-fg-muted">
+                <ArrowDown size={14} strokeWidth={1.75} />
               </p>
             ) : null}
           </li>
@@ -267,41 +304,39 @@ function ShoppingStateSection() {
 
 function PersistenceSection() {
   return (
-    <section className="mt-10">
+    <section className="mt-10 md:mt-14">
       <ProjectSectionHeading comment="state persistence">
         State Persistence
       </ProjectSectionHeading>
       <p className="max-w-[44rem] text-[15px] leading-[1.7] text-fg-secondary">
         {project.persistence.summary}
       </p>
+      {project.persistence.note ? (
+        <p className="mt-3 max-w-[44rem] font-mono text-[12px] leading-5 text-syntax-comment">
+          {"// "}
+          {project.persistence.note}
+        </p>
+      ) : null}
       <p className="sr-only">{project.persistence.flowDescription}</p>
       <div
         aria-hidden="true"
-        className="mt-6 flex min-w-0 flex-col gap-5 min-[880px]:flex-row min-[880px]:items-start"
+        className="mt-6 grid gap-8 min-[880px]:grid-cols-2 min-[880px]:gap-x-12"
       >
         <StageColumn
-          heading="during the session"
+          heading="current session"
           stages={project.persistence.persistFlow}
         />
-        <div className="flex shrink-0 items-center justify-center px-1 text-fg-muted min-[880px]:pt-8">
-          <ArrowDown size={14} strokeWidth={1.75} className="min-[880px]:hidden" />
-          <ArrowRight
-            size={14}
-            strokeWidth={1.75}
-            className="hidden min-[880px]:block"
-          />
-        </div>
         <StageColumn
-          heading="shopping continues"
+          heading="next session"
           stages={project.persistence.restoreFlow}
         />
       </div>
-      <dl className="mt-8 grid gap-5 min-[800px]:grid-cols-2">
+      <dl className="mt-8 grid gap-5 min-[800px]:grid-cols-2 min-[800px]:gap-x-12">
         <div className="min-w-0 border-t border-subtle pt-3">
           <dt className="font-mono text-[13px] text-syntax-property">
             Shared state
           </dt>
-          <dd className="mt-1.5 max-w-[28rem] text-[14px] leading-6 text-fg-secondary">
+          <dd className="mt-1 max-w-[28rem] text-[14px] leading-6 text-fg-secondary">
             {project.persistence.sharedRole}
           </dd>
         </div>
@@ -309,7 +344,7 @@ function PersistenceSection() {
           <dt className="font-mono text-[13px] text-syntax-property">
             Persistence
           </dt>
-          <dd className="mt-1.5 max-w-[28rem] text-[14px] leading-6 text-fg-secondary">
+          <dd className="mt-1 max-w-[28rem] text-[14px] leading-6 text-fg-secondary">
             {project.persistence.persistedRole}
           </dd>
         </div>
@@ -326,8 +361,8 @@ function StageColumn({
   stages: readonly FlowStage[]
 }) {
   return (
-    <div className="min-w-0 flex-1">
-      <p className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">
+    <div className="min-w-0">
+      <p className="font-mono text-[11px] font-medium tracking-[0.12em] text-fg uppercase">
         {heading}
       </p>
       <ol className="mt-3 font-mono text-[13px] leading-7 text-fg-secondary">
@@ -346,7 +381,7 @@ function StageColumn({
 
 function ReuseSection() {
   return (
-    <section className="mt-10">
+    <section>
       <ProjectSectionHeading comment="reusable UI architecture">
         Reusable UI Architecture
       </ProjectSectionHeading>
@@ -356,7 +391,7 @@ function ReuseSection() {
       <p className="sr-only">{project.reuse.comparisonDescription}</p>
       <div
         aria-hidden="true"
-        className="mt-6 grid gap-8 min-[800px]:grid-cols-2"
+        className="mt-6 grid gap-8 min-[800px]:grid-cols-2 min-[800px]:gap-x-12"
       >
         <div className="min-w-0">
           <p className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">
@@ -401,9 +436,9 @@ function ReuseSection() {
 
 function MobileFirstSection() {
   return (
-    <section className="mt-10">
-      <ProjectSectionHeading comment="mobile-first">
-        Mobile-First UI
+    <section className="mt-10 md:mt-14">
+      <ProjectSectionHeading comment="mobile first">
+        Mobile First Layout
       </ProjectSectionHeading>
       <p className="max-w-[44rem] text-[15px] leading-[1.7] text-fg-secondary">
         {project.mobileFirst.summary}
@@ -415,23 +450,23 @@ function MobileFirstSection() {
       >
         {project.mobileFirst.stages.map((stage, index) => (
           <Fragment key={stage.id}>
-            <li className="min-w-0 flex-1 border-l border-subtle py-1 pl-3 min-[800px]:border-t min-[800px]:border-l-0 min-[800px]:px-0 min-[800px]:pt-3 min-[800px]:pb-0">
-              <p className="font-mono text-[11px] tracking-[0.12em] text-syntax-property uppercase">
+            <li className="min-w-0 flex-1 border-l border-subtle py-2 pl-3 min-[800px]:border-t min-[800px]:border-l-0 min-[800px]:px-0 min-[800px]:pt-3 min-[800px]:pb-0">
+              <p className="font-mono text-[12px] font-medium tracking-[0.12em] text-fg uppercase">
                 {stage.label}
               </p>
-              <p className="mt-1 text-[13px] leading-5 text-fg-secondary">
+              <p className="mt-1.5 text-[13px] leading-5 text-fg-secondary">
                 {stage.detail}
               </p>
             </li>
             {index < project.mobileFirst.stages.length - 1 ? (
-              <li className="flex shrink-0 items-center px-0 py-1 pl-3 min-[800px]:px-2 min-[800px]:py-0 min-[800px]:pl-0">
+              <li className="flex shrink-0 items-center px-0 py-2 pl-3 min-[800px]:px-2.5 min-[800px]:py-0 min-[800px]:pl-0">
                 <ArrowDown
-                  size={14}
+                  size={16}
                   strokeWidth={1.75}
                   className="text-fg-muted min-[800px]:hidden"
                 />
                 <ArrowRight
-                  size={14}
+                  size={16}
                   strokeWidth={1.75}
                   className="hidden text-fg-muted min-[800px]:block"
                 />
@@ -446,7 +481,7 @@ function MobileFirstSection() {
 
 function ProductDataSection() {
   return (
-    <section className="mt-10">
+    <section>
       <ProjectSectionHeading comment="product data">
         External Product Data
       </ProjectSectionHeading>
@@ -463,7 +498,7 @@ function ProductDataSection() {
 
 function HighlightsSection() {
   return (
-    <section className="mt-10">
+    <section className="mt-10 md:mt-14">
       <ProjectSectionHeading comment="engineering highlights">
         Engineering Highlights
       </ProjectSectionHeading>
@@ -491,7 +526,7 @@ function HighlightsSection() {
 
 function ApplicationFlowSection() {
   return (
-    <section className="mt-10">
+    <section className="mt-10 md:mt-14">
       <ProjectSectionHeading comment="application flow">
         Application Flow
       </ProjectSectionHeading>
@@ -545,7 +580,7 @@ function InlineFlow({
 
 function DecisionsSection() {
   return (
-    <section className="mt-10">
+    <section className="mt-10 md:mt-14">
       <ProjectSectionHeading comment="engineering decisions">
         Engineering Decisions
       </ProjectSectionHeading>
@@ -554,6 +589,7 @@ function DecisionsSection() {
         problemLabel="constraint"
         approachLabel="choice"
         outcomeLabel="reason"
+        stackUntilWide
       />
     </section>
   )
@@ -567,7 +603,7 @@ function ChallengesSection() {
   }
 
   return (
-    <section className="mt-10">
+    <section>
       <ProjectSectionHeading comment="architecture challenges">
         Frontend Architecture Challenges
       </ProjectSectionHeading>
@@ -575,13 +611,13 @@ function ChallengesSection() {
         {challenges.map((item) => (
           <li
             key={item.id}
-            className="grid gap-3 py-4 min-[800px]:grid-cols-2 min-[800px]:gap-8"
+            className="grid gap-4 py-5 min-[800px]:grid-cols-2 min-[800px]:gap-10"
           >
             <div className="min-w-0">
               <p className="font-mono text-[11px] tracking-[0.08em] text-syntax-property">
                 challenge
               </p>
-              <h3 className="mt-1 text-[15px] font-medium text-fg">
+              <h3 className="mt-1.5 text-[15px] font-semibold tracking-tight text-fg">
                 {item.title}
               </h3>
               <p className="mt-1.5 text-[14px] leading-6 text-fg-secondary">
@@ -592,7 +628,7 @@ function ChallengesSection() {
               <p className="font-mono text-[11px] tracking-[0.08em] text-syntax-property">
                 solution direction
               </p>
-              <p className="mt-1.5 text-[14px] leading-6 text-fg-secondary">
+              <p className="mt-1.5 text-[14px] leading-6 text-fg">
                 {item.approach}
               </p>
             </div>
@@ -605,7 +641,7 @@ function ChallengesSection() {
 
 function StackSection() {
   return (
-    <section className="mt-10">
+    <section>
       <ProjectSectionHeading comment="stack">
         Project Stack
       </ProjectSectionHeading>
@@ -615,7 +651,7 @@ function StackSection() {
             <dt className="font-mono text-[11px] tracking-[0.12em] text-fg-muted uppercase">
               {item.label}
             </dt>
-            <dd className="mt-1.5 text-[13px] text-fg-secondary">{item.value}</dd>
+            <dd className="mt-1.5 text-[13px] text-fg">{item.value}</dd>
           </div>
         ))}
       </dl>
@@ -625,7 +661,7 @@ function StackSection() {
 
 function DemonstratesSection() {
   return (
-    <section className="mt-10">
+    <section className="mt-10 border-t border-subtle pt-10 md:mt-12 md:pt-14">
       <ProjectSectionHeading comment="coverage">
         What This Project Demonstrates
       </ProjectSectionHeading>

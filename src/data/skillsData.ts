@@ -15,22 +15,21 @@ export type SkillGroup = {
 export const skillsIntro = {
   developer: personalInfo.name,
   role: personalInfo.role,
-  primaryNames: ["React", "TypeScript", "Django REST Framework", "PostgreSQL"] as const,
+  primaryNames: ["React", "JavaScript", "Django REST Framework", "PostgreSQL"] as const,
   summary:
-    "Maryam works primarily across React-based frontend development and Django REST APIs, with PostgreSQL and modern tooling supporting the full application lifecycle.",
-  note: "tools evolve; engineering fundamentals stay useful.",
+    "I work across frontend and backend development, using React and JavaScript for interfaces, Django REST Framework for APIs, and PostgreSQL for application data.",
 }
 
 export const primaryStack: Skill[] = [
   {
     id: "react",
     name: "React",
-    context: "Component-driven frontend applications",
+    context: "Component driven frontend applications",
   },
   {
-    id: "typescript",
-    name: "TypeScript",
-    context: "Typed frontend architecture and safer application code",
+    id: "javascript",
+    name: "JavaScript",
+    context: "Frontend application logic and development",
   },
   {
     id: "drf",
@@ -49,17 +48,21 @@ export const skillGroups: SkillGroup[] = [
     id: "frontend",
     key: "frontend",
     skills: [
-      { id: "javascript", name: "JavaScript", context: "application logic" },
+      {
+        id: "typescript",
+        name: "TypeScript",
+        context: "Typed JavaScript development",
+      },
       { id: "tailwind", name: "Tailwind CSS", context: "styling systems" },
       {
         id: "tanstack-query",
         name: "TanStack Query",
-        context: "server-state / data fetching",
+        context: "server state and data fetching",
       },
       { id: "tanstack-router", name: "TanStack Router", context: "routing" },
       { id: "context-api", name: "Context API", context: "shared client state" },
       { id: "framer-motion", name: "Framer Motion", context: "UI motion" },
-      { id: "gsap", name: "GSAP", context: "advanced animation" },
+      { id: "gsap", name: "GSAP", context: "interface animation" },
     ],
   },
   {
@@ -70,7 +73,7 @@ export const skillGroups: SkillGroup[] = [
       {
         id: "rest-design",
         name: "REST API Design",
-        context: "client/server contracts",
+        context: "client server contracts",
       },
       {
         id: "jwt",
@@ -87,7 +90,7 @@ export const skillGroups: SkillGroup[] = [
       {
         id: "supabase",
         name: "Supabase",
-        context: "database / platform integration",
+        context: "database and platform integration",
       },
     ],
   },
@@ -97,7 +100,7 @@ export const skillGroups: SkillGroup[] = [
     skills: [
       { id: "git-github", name: "Git / GitHub", context: "version control" },
       { id: "docker", name: "Docker", context: "containerized development" },
-      { id: "vite", name: "Vite", context: "frontend tooling / build" },
+      { id: "vite", name: "Vite", context: "frontend tooling and build" },
     ],
   },
   {
@@ -106,7 +109,7 @@ export const skillGroups: SkillGroup[] = [
     skills: [
       { id: "vercel", name: "Vercel", context: "frontend deployment" },
       { id: "render", name: "Render", context: "application hosting" },
-      { id: "netlify", name: "Netlify", context: "static / frontend hosting" },
+      { id: "netlify", name: "Netlify", context: "static and frontend hosting" },
     ],
   },
 ]

@@ -229,6 +229,28 @@ textarea:-webkit-autofill {
   }
 }
 
+.home-editor-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 3px;
+  vertical-align: text-bottom;
+  background: var(--accent);
+  animation: home-caret-blink 1000ms steps(1, end) infinite;
+}
+
+@keyframes home-caret-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+
 @keyframes sidebar-overlay-in {
   from {
     opacity: 0.92;
@@ -265,7 +287,12 @@ textarea:-webkit-autofill {
 
 @media (prefers-reduced-motion: reduce) {
   .sidebar-overlay-in,
-  .terminal-overlay-in {
+  .terminal-overlay-in,
+  .home-editor-caret {
     animation: none !important;
+  }
+
+  .home-editor-caret {
+    opacity: 1;
   }
 }
