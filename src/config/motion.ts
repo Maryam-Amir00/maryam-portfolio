@@ -12,8 +12,8 @@ export const motionDuration = {
 export const motionEase = [0.2, 0.8, 0.2, 1] as const
 
 export const editorEnter = {
-  initial: { opacity: 0.94, y: 3 },
-  animate: { opacity: 1, y: 0 },
+  initial: { y: 3 },
+  animate: { y: 0 },
 } as const
 
 export const editorEnterReduced = {

@@ -7,6 +7,15 @@ import {
   motionEase,
 } from "../../config/motion"
 
+function editorTransformTemplate({ y }: { y?: number | string }) {
+  const value = typeof y === "number" ? y : Number.parseFloat(String(y ?? 0))
+  if (!Number.isFinite(value) || value === 0) {
+    return "none"
+  }
+
+  return `translateY(${value}px)`
+}
+
 export function EditorContentTransition({
   activeFileId,
   disableTransform = false,
@@ -27,6 +36,7 @@ export function EditorContentTransition({
       key={activeFileId ?? "empty"}
       initial={variants.initial}
       animate={variants.animate}
+      transformTemplate={skipTransform ? undefined : editorTransformTemplate}
       transition={{
         duration: reduceMotion ? 0 : motionDuration.editor,
         ease: motionEase,
