@@ -23,6 +23,7 @@ export type ExperienceEntry = {
   id: string
   role: string
   company: string
+  companyUrl?: string
   location: string
   startDate: string
   startDateDisplay: string
@@ -42,6 +43,7 @@ export const currentExperience: ExperienceEntry = {
   id: "utility-access-services",
   role: "Frontend Developer Intern",
   company: "Utility Access Services",
+  companyUrl: "https://softaccess.co.uk/",
   location: "Lahore, Pakistan",
   startDate: "2026-05",
   startDateDisplay: "May 2026",

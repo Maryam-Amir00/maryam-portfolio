@@ -1,3 +1,4 @@
+import { ExternalLink } from "lucide-react"
 import {
   currentExperience,
   formatExperiencePeriod,
@@ -90,7 +91,27 @@ function RoleHeader() {
       <h1 className="mt-3 text-[clamp(1.75rem,3.4vw,2.35rem)] leading-tight font-semibold tracking-tight break-words text-fg">
         {experience.role}
       </h1>
-      <p className="mt-2 text-[1.05rem] text-fg-secondary">{experience.company}</p>
+      <p className="mt-2 min-w-0 text-[1.05rem] text-fg-secondary">
+        {experience.companyUrl ? (
+          <a
+            href={experience.companyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Visit Utility Access Services website"
+            className="group inline-flex max-w-full min-w-0 flex-wrap items-center gap-1 text-fg-secondary ui-transition hover:text-accent focus-visible:text-accent"
+          >
+            <span className="min-w-0 break-words">{experience.company}</span>
+            <ExternalLink
+              size={14}
+              strokeWidth={1.75}
+              aria-hidden="true"
+              className="motion-nudge-x shrink-0"
+            />
+          </a>
+        ) : (
+          experience.company
+        )}
+      </p>
       <p className="mt-2 font-mono text-[13px] text-fg-muted">
         <time dateTime={experience.startDate}>{experience.startDateDisplay}</time>
         {" → "}
