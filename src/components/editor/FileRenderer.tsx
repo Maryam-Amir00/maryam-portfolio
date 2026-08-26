@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from "react"
 import { EmptyEditor } from "./EmptyEditor"
 import { PlaceholderFileView } from "./PlaceholderFileView"
 import { AboutView } from "./views/AboutView"
@@ -25,6 +26,15 @@ import { EditorContentTransition } from "../motion/EditorContentTransition"
 
 export function FileRenderer() {
   const { activeFile } = useWorkspace()
+  const editorScrollRef = useRef<HTMLDivElement>(null)
+  const activeFileId = activeFile?.id ?? null
+
+  useLayoutEffect(() => {
+    editorScrollRef.current?.scrollTo({
+      top: 0,
+      behavior: "auto",
+    })
+  }, [activeFileId])
 
   if (!activeFile) {
     return (
@@ -38,6 +48,7 @@ export function FileRenderer() {
 
   return (
     <div
+      ref={editorScrollRef}
       className={
         isResume
           ? "flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-editor"
